@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response;
+
+class AuthController extends Controller
+{
+    public function register(Request $request)
+    {
+        User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password'))
+        ]);
+        return Inertia::render('Home');
+    }
+
+    public function login(Request $request)
+    {
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response([
+                'message' => 'Invalid credentials!'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+        $user = Auth::user();
+
+        $token = $user->createToken('token')->plainTextToken;
+        $cookie = cookie('jwt', $token, 1440);
+        return \response([
+            'message' => 'success'
+        ])->withCookie($cookie);
+    }
+
+    public function user()
+    {
+        return Auth::user();
+    }
+}

@@ -49,6 +49,9 @@ import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIte
 export default {
     name: "Layout",
     components: {},
+    props:{
+        title: String
+    },
     data() {
         return {
             navigation: [{name: 'Home', href: '', current: false},
@@ -60,7 +63,7 @@ export default {
                 {name: 'Sign Up', href: '/register', current: false},
             ]
         }
-    }
+    },
 }
 </script>
 <style scoped>
