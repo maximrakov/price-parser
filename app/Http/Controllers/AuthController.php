@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -33,13 +34,20 @@ class AuthController extends Controller
 
         $token = $user->createToken('token')->plainTextToken;
         $cookie = cookie('jwt', $token, 1440);
-        return \response([
-            'message' => 'success'
-        ])->withCookie($cookie);
+        return \redirect()
+            ->route('home')
+            ->withCookie($cookie);
     }
 
     public function user()
     {
         return Auth::user();
+    }
+
+    public function logout(Request $request) {
+        $cookie = Cookie::forget('jwt');
+        return \redirect()
+            ->route('home')
+            ->withCookie($cookie);
     }
 }
