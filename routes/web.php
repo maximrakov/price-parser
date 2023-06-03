@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [\App\Http\Controllers\IndexController::class, 'index'])->name('home');
+Route::get('/product', [\App\Http\Controllers\IndexController::class, 'product'])->name('product');
 Route::get('/register', [\App\Http\Controllers\IndexController::class, 'register'])->name('register');
 Route::get('/login', [\App\Http\Controllers\IndexController::class, 'login'])->name('login');
 Route::get('/test', function () {

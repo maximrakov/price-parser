@@ -15,8 +15,8 @@ class PriceEntry extends Model
         'price'
     ];
 
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
-    }
+//    public function product(): BelongsTo
+//    {
+//        return $this->belongsTo(Product::class);
+//    }
 }

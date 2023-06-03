@@ -20,7 +20,7 @@ class AuthController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password'))
         ]);
-        return Inertia::render('Home');
+        return Inertia::render('Login');
     }
 
     public function login(Request $request)
