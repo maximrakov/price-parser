@@ -4,7 +4,7 @@
             <div class="flex gap-x-4">
                 <img class="h-12 w-12 flex-none rounded-full bg-gray-50" :src="product.imageUrl" alt=""/>
                 <div class="min-w-0 flex-auto">
-                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline" v-bind:href="'/product/?id=' + product.id" >
+                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline" v-bind:href="'/product?id=' + product.id" >
                         {{ product.name }}</a>
                     <p class="mt-1 truncate text-xs leading-5">Цена: {{ product.price }} рублей</p>
                 </div>

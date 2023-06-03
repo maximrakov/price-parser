@@ -19,8 +19,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
-Route::get('/product', [\App\Http\Controllers\ProductController::class, 'getProductByLink']);
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/product', [\App\Http\Controllers\ProductController::class, 'getProductByLink']);
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
     Route::post('/subscribeProduct', [\App\Http\Controllers\UserController::class, 'subscribeProduct']);
     Route::post('/unsubscribeProduct', [\App\Http\Controllers\UserController::class, 'unsubscribeProduct']);
