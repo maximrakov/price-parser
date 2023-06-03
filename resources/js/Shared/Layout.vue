@@ -70,7 +70,7 @@ export default {
         return {
             user: null,
             navigation: [{name: 'Home', href: '/', current: false},
-                {name: 'Subscriptions', href: '/', current: false},
+                {name: 'Subscriptions', href: '/subscriptions', current: false},
             ],
             rendered: false,
             active: false,

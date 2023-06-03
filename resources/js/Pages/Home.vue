@@ -20,9 +20,6 @@ export default {
     components: {
         Layout
     },
-    props: {
-        title: String
-    },
     layout: Layout
 }
 

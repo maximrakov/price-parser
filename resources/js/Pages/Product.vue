@@ -5,9 +5,9 @@
             <div class="text-center md:text-left">
                 <h1 class="text-3xl font-bold mb-2">{{ product.name }}</h1>
                 <div>
-                    <button :class="[hasProduct ? 'bg-red-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' : 'bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded']"
-                        class=""
-                            @click="toggleSubscription">
+                    <button
+                        :class="[hasProduct ? 'bg-red-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' : 'bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded']"
+                        @click="toggleSubscription">
                         <div v-if="hasProduct">Отписаться</div>
                         <div v-else>Подписаться</div>
                     </button>
