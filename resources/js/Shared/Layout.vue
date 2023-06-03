@@ -55,14 +55,14 @@ export default {
     methods: {
         logout() {
             axios
-                .post('http://localhost:8000/api/logout')
+                .post('api/logout')
                 .then(response => window.location = "/");
         }
     },
 
     mounted() {
         axios
-            .get('http://localhost:8000/api/user')
+            .get('api/user')
             .then(response => (this.user = response.data));
         this.rendered = true;
     },

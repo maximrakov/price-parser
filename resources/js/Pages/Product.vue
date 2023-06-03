@@ -5,8 +5,11 @@
             <div class="text-center md:text-left">
                 <h1 class="text-3xl font-bold mb-2">{{ product.name }}</h1>
                 <div>
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="toggleSubscription">
-                        {{ subscriptionButtonLabel }}
+                    <button :class="[hasProduct ? 'bg-red-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' : 'bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded']"
+                        class=""
+                            @click="toggleSubscription">
+                        <div v-if="hasProduct">Отписаться</div>
+                        <div v-else>Подписаться</div>
                     </button>
                 </div>
             </div>
@@ -31,23 +34,27 @@
 </template>
 <script>
 import Layout from "../Shared/Layout.vue";
+import axios from "axios";
 
 export default {
     data() {
         return {
             image: 'https://via.placeholder.com/400x400',
+            hasProduct: this.updateProductExistence(),
         };
-    },
-    computed: {
-        subscriptionButtonLabel() {
-            console.log(this.priceHistory);
-            return this.product.isSubscribed ? 'Unsubscribe' : 'Subscribe';
-        },
     },
     methods: {
         toggleSubscription() {
-            this.product.isSubscribed = !this.product.isSubscribed;
+
+            const url = this.hasProduct ? 'api/unsubscribeProduct' : 'api/subscribeProduct';
+            axios.post(url, {'id': this.product.id});
+            this.updateProductExistence()
         },
+        updateProductExistence() {
+            axios
+                .get('api/hasProduct', {params: {'id': this.product.id}})
+                .then(response => this.hasProduct = response.data);
+        }
     },
     components: {
         Layout

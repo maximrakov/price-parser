@@ -23,4 +23,7 @@ Route::get('/product', [\App\Http\Controllers\ProductController::class, 'getProd
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [\App\Http\Controllers\AuthController::class, 'user']);
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
+    Route::post('/subscribeProduct', [\App\Http\Controllers\UserController::class, 'subscribeProduct']);
+    Route::post('/unsubscribeProduct', [\App\Http\Controllers\UserController::class, 'unsubscribeProduct']);
+    Route::get('/hasProduct', [\App\Http\Controllers\UserController::class, 'hasProduct']);
 });

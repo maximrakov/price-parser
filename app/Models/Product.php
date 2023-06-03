@@ -22,8 +22,8 @@ class Product extends Model
         return $this->hasMany(PriceEntry::class);
     }
 
-    public function user(): BelongsTo
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class);
     }
 }
