@@ -32,6 +32,9 @@ class IndexController extends Controller
         } else {
             $product = Product::where('id', $request['id'])->first();
         }
+        if (!$product) {
+            return Inertia::render('Home', ['error' => 'Incorrect link']);
+        }
         return Inertia::render('Product',
             ['product' => $product, 'priceHistory' => $product->priceEntry()->get()]);
     }

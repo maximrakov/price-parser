@@ -17,7 +17,7 @@ Route::get('/', [\App\Http\Controllers\IndexController::class, 'index'])->name('
 Route::get('/register', [\App\Http\Controllers\IndexController::class, 'register'])->name('register');
 Route::get('/login', [\App\Http\Controllers\IndexController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/subscriptions', [\App\Http\Controllers\IndexController::class, 'subscriptions'])->name('subscriptions');;
+    Route::get('/subscriptions', [\App\Http\Controllers\IndexController::class, 'subscriptions'])->name('subscriptions');
     Route::get('/product', [\App\Http\Controllers\IndexController::class, 'product'])->name('product');
 });
 Route::get('/test', function () {

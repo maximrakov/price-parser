@@ -45,7 +45,6 @@ export default {
     },
     methods: {
         toggleSubscription() {
-
             const url = this.hasProduct ? 'api/unsubscribeProduct' : 'api/subscribeProduct';
             axios.post(url, {'id': this.product.id});
             this.updateProductExistence()
