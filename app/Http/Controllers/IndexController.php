@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bot\TelegramBot;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,14 @@ class IndexController extends Controller
 
     public function subscriptions()
     {
-        $products = Auth::user()->products()->get();
+        $products = Auth::user()
+            ->products()
+            ->get();
         return Inertia::render('Subscriptions', ['products' => $products]);
+    }
+
+    public function notifications()
+    {
+        return Inertia::render('Notifications');
     }
 }

@@ -19,7 +19,8 @@
         "phpquery/phpquery": "^0.0.4",
         "rct567/dom-query": "^0.1.3",
         "scotteh/php-dom-wrapper": "^2.0",
-        "tightenco/ziggy": "^1.6"
+        "tightenco/ziggy": "^1.6",
+        "irazasyed/telegram-bot-sdk": "^3.13.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

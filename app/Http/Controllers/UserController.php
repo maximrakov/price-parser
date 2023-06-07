@@ -9,26 +9,43 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function subscribeProduct(Request $request)
+    public function getProduct($userId, $productId)
     {
-        $user = Auth::user();
-        $product = Product::find($request['id']);
-        $product->users()
-            ->save($user);
+        $user = User::find($userId);
+        if (!$user) {
+            return response("user not found", 404);
+        }
+        $product = $user->products()
+            ->find($productId);
+        if (!$product) {
+            return response("product not found", 404);
+        }
+        return $product;
     }
 
-    public function unsubscribeProduct(Request $request)
+    public function addProduct($userId, $productId)
     {
-        $user = Auth::user();
-        $product = Product::find($request['id']);
-        $product->users()
-            ->detach($user);
+        return $this->product('save', $userId, $productId);
     }
 
-    public function hasProduct(Request $request)
+    public function deleteProduct($userId, $productId)
     {
-        return Auth::user()
-                ->products()
-                ->find($request['id']) !== null;
+        return $this->product('detach', $userId, $productId);
+    }
+
+    private function product($action, $userId, $productId)
+    {
+        $user = User::find($userId);
+        $product = Product::find($productId);
+        if (!$user || !$product) {
+            $notFoundResourse = (!$user and !$product) ? 'user and product' : (!$user ? 'user' : 'product');
+            return response("$notFoundResourse not found", 404);
+        }
+        $userHasProduct = ($user->products()->find($productId) !== null) && ($action === 'save');
+        $userHasNotProduct = ($user->products()->find($productId) === null) && ($action === 'detach');
+        if ($userHasProduct || $userHasNotProduct) {
+            return response('conflict', 409);
+        }
+        $user->products()->$action($product);
     }
 }

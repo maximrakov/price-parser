@@ -18,6 +18,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'telegram.bot_token' => '5860112528:AAFaG361LEIqWhLwEmOg32HKoREs7iCfHBc',
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -168,6 +169,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelegramBotServiceProvider::class
     ])->toArray(),
 
     /*

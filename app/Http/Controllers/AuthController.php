@@ -18,7 +18,8 @@ class AuthController extends Controller
         User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password'))
+            'password' => Hash::make($request->input('password')),
+            'code' => $this->generateCode()
         ]);
         return Inertia::render('Login');
     }
@@ -39,11 +40,25 @@ class AuthController extends Controller
             ->withCookie($cookie);
     }
 
+    public function user()
+    {
+        return Auth::user();
+    }
+
     public function logout(Request $request)
     {
         $cookie = Cookie::forget('jwt');
         return \redirect()
             ->route('home')
             ->withCookie($cookie);
+    }
+
+    private function generateCode()
+    {
+        $code = rand(1, 1000000000);
+        while (User::where('code', $code)->first() != null) {
+            $code = rand(1, 1000000000);
+        }
+        return $code;
     }
 }

@@ -64,9 +64,4 @@ class ProductController extends Controller
     {
         //
     }
-
-    public function getProductByLink(Request $request)
-    {
-        return Product::where('link', $request['link'])->with('priceEntry')->get();
-    }
 }

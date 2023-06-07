@@ -19,10 +19,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
-Route::get('/product', [\App\Http\Controllers\ProductController::class, 'getProductByLink']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
-    Route::post('/subscribeProduct', [\App\Http\Controllers\UserController::class, 'subscribeProduct']);
-    Route::post('/unsubscribeProduct', [\App\Http\Controllers\UserController::class, 'unsubscribeProduct']);
-    Route::get('/hasProduct', [\App\Http\Controllers\UserController::class, 'hasProduct']);
+    Route::post('/user/{userId}/product/{productId}', [\App\Http\Controllers\UserController::class, 'addProduct']);
+    Route::delete('/user/{userId}/product/{productId}', [\App\Http\Controllers\UserController::class, 'deleteProduct']);
+    Route::get('/user/{userId}/product/{productId}', [\App\Http\Controllers\UserController::class, 'getProduct']);
+    Route::post('/bot', [\App\Http\Controllers\TelegramController::class, 'callBot']);
 });

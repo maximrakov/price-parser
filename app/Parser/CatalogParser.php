@@ -66,10 +66,10 @@ abstract class CatalogParser
 
     protected function parsePage($page)
     {
-        $doc = new Document();
-        $doc->html($page);
-        $prices = $doc->find($this->getPriceBlockCssSelector());
-        $names = $doc->find($this->getNameBlockCssSelector());
+        $dom = new Document();
+        $dom->html($page);
+        $prices = $dom->find($this->getPriceBlockCssSelector());
+        $names = $dom->find($this->getNameBlockCssSelector());
         $namesList = $names->each(function ($node) {
         });
         $pricesList = $prices->each(function ($node) {
@@ -103,8 +103,8 @@ abstract class CatalogParser
 
     public function crawlingPages()
     {
-        while ($this->havePages) {
-            $this->parsePage($this->retrieveCurrentPage());
-        }
+//        while ($this->havePages) {
+        $this->parsePage($this->retrieveCurrentPage());
+//        }
     }
 }

@@ -21,12 +21,12 @@
                             <div class="ml-10 flex items-baseline space-x-4">
                                 <div v-if="user">
                                     <p1 class="rounded-md px-3 py-2 text-sm font-medium">Hello, {{ user.name }}</p1>
-                                    <a v-for="item in loggedRightPannel" :key="item.name" @click="logout" href="#"
+                                    <a v-for="item in loggedPannel" :key="item.name" @click="logout" href="#"
                                        :class="[item.current ? 'bg-gray-900 text-white' : 'text-black-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']"
                                        :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
                                 </div>
                                 <div v-else>
-                                    <a v-for="item in unloggedRightPannel" :key="item.name" :href="item.href"
+                                    <a v-for="item in unloggedPannel" :key="item.name" :href="item.href"
                                        :class="[item.current ? 'bg-gray-900 text-white' : 'text-black-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']"
                                        :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
                                 </div>
@@ -46,7 +46,7 @@
 
 
 <script>
-import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
+import {Disclosure} from '@headlessui/vue'
 import axios from "axios";
 
 export default {
@@ -71,14 +71,15 @@ export default {
             user: null,
             navigation: [{name: 'Home', href: '/', current: false},
                 {name: 'Subscriptions', href: '/subscriptions', current: false},
+                {name: 'Notifications', href: '/notifications', current: false}
             ],
             rendered: false,
             active: false,
             open: false,
-            unloggedRightPannel: [{name: 'Login', href: '/login', current: false},
+            unloggedPannel: [{name: 'Login', href: '/login', current: false},
                 {name: 'Sign Up', href: '/register', current: false},
             ],
-            loggedRightPannel: [{name: 'Logout', href: '/', current: false}]
+            loggedPannel: [{name: 'Logout', href: '/', current: false}]
         }
     },
 }
