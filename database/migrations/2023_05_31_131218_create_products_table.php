@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('link')->unique();
             $table->string('name');
             $table->integer('price');
+            $table->string('image');
             $table->timestamps();
         });
     }

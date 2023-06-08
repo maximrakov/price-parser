@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto my-10">
         <div class="flex flex-col md:flex-row items-center">
-            <img class="w-64 h-64 mb-6 md:mb-0 md:mr-6 rounded-lg shadow-lg" :src="image" :alt="product.name">
+            <img class="w-64 h-64 mb-6 md:mb-0 md:mr-6 rounded-lg shadow-lg" :src="product.image" :alt="product.name">
                         <Dialog v-if="showDialog">
                             <template #title>
                                 <h1>Вы не привязали телеграм</h1>
@@ -94,7 +94,6 @@ export default {
         axios.get('api/user')
             .then(response => {
                 this.user = response.data;
-                console.log(this.user);
                 this.updateProductExistence();
             });
     },

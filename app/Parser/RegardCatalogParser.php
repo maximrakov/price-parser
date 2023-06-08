@@ -4,12 +4,7 @@ namespace App\Parser;
 
 class RegardCatalogParser extends CatalogParser
 {
-    function getPriceBlockCssSelector()
-    {
-        return '.Card_content__eWojG .Price_price__m2aSe';
-    }
-
-    function getNameBlockCssSelector()
+    function getLinkBlockCssSelector()
     {
         return '.CardText_link__C_fPZ';
     }
@@ -17,5 +12,10 @@ class RegardCatalogParser extends CatalogParser
     function getFirstPage()
     {
         return 'https://www.regard.ru/catalog/new?page=';
+    }
+
+    public function getHost()
+    {
+        return 'https://www.regard.ru';
     }
 }

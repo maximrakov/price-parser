@@ -25,4 +25,6 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/test', function () {
     $parser = new \App\Parser\RegardCatalogParser();
     return $parser->crawlingPages();
+//    $parser = new \App\Parser\RegardProductParser();
+//    $parser->parse('wewrwerwer');
 });

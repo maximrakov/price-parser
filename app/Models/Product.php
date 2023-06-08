@@ -14,7 +14,8 @@ class Product extends Model
     protected $fillable = [
         'link',
         'name',
-        'price'
+        'price',
+        'image'
     ];
 
     public function priceEntry(): HasMany
