@@ -47,8 +47,8 @@ abstract class CatalogParser
 
     public function crawlingPages()
     {
-        while ($this->havePages) {
+//        while ($this->havePages) {
             $this->parsePage($this->retrieveCurrentPage());
-        }
+//        }
     }
 }

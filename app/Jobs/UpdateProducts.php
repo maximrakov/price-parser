@@ -31,7 +31,8 @@ class UpdateProducts implements ShouldQueue
     {
         $products = Product::all();
         foreach ($products as $product) {
-            $this->getParser($product->parse($product->link));
+            $link = $product->link;
+            $this->getParser($link)->parse($link);
         }
     }
 

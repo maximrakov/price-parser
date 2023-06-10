@@ -1,6 +1,9 @@
 <?php
 
+use App\Events\PriceUpdated;
 use App\Http\Controllers\IndexController;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +28,9 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/test', function () {
     $parser = new \App\Parser\RegardCatalogParser();
     return $parser->crawlingPages();
-//    $parser = new \App\Parser\RegardProductParser();
-//    $parser->parse('wewrwerwer');
+});
+
+Route::get('/event', function () {
+    $product = Product::find(3);
+    event(new PriceUpdated($product));
 });

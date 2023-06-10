@@ -16,16 +16,19 @@ class UserController extends Controller
             return response("user not found", 404);
         }
         $product = $user->products()
+            ->withPivot('notification_price')
             ->find($productId);
+
         if (!$product) {
             return response("product not found", 404);
         }
         return $product;
     }
 
-    public function addProduct($userId, $productId)
+    public function addProduct($userId, $productId, Request $request)
     {
-        return $this->product('save', $userId, $productId);
+        $notificationPrice = $request['notificationPrice'];
+        return $this->product('attach', $userId, $productId, $notificationPrice);
     }
 
     public function deleteProduct($userId, $productId)
@@ -33,7 +36,7 @@ class UserController extends Controller
         return $this->product('detach', $userId, $productId);
     }
 
-    private function product($action, $userId, $productId)
+    private function product($action, $userId, $productId, $notificationPrice = null)
     {
         $user = User::find($userId);
         $product = Product::find($productId);
@@ -46,6 +49,10 @@ class UserController extends Controller
         if ($userHasProduct || $userHasNotProduct) {
             return response('conflict', 409);
         }
-        $user->products()->$action($product);
+        if ($notificationPrice) {
+            return $user->products()->$action($productId, ['notification_price' => $notificationPrice]);
+        } else {
+            return $user->products()->$action($productId);
+        }
     }
 }

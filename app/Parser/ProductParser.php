@@ -2,6 +2,7 @@
 
 namespace App\Parser;
 
+use App\Events\PriceUpdated;
 use App\Models\Product;
 use DOMWrap\Document;
 
@@ -21,7 +22,6 @@ abstract class ProductParser
         $page = ParserTools::parse($link);
         $dom = new Document();
         $dom->html($page);
-        print_r($page);
         $price = $this->parsePrice($dom->find($this->getPriceBlockCssSelector())->text());
         $name = $dom->find($this->getNameBlockCssSelector())->text();
         $image = 'https://www.regard.ru' . $dom->find($this->getImageBlockCssSelector())->attr('src');
@@ -31,7 +31,6 @@ abstract class ProductParser
     protected function persistProduct($link, $name, $price, $image)
     {
         $product = Product::where('link', $link)->first();
-        print_r($link);
         if ($product == null) {
             $product = new Product(['link' => $link, 'name' => $name, 'price' => $price, 'image' => $image]);
             $product->save();
@@ -39,6 +38,7 @@ abstract class ProductParser
         } else {
             if ($product->price != $price) {
                 $product->price = $price;
+                event(new PriceUpdated($product));
                 $product->priceEntry()->create(['price' => $price, 'time' => date('Y-m-d H:i:s')]);
             }
         }

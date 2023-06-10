@@ -27,9 +27,7 @@ class TelegramBot
             $chatId = intval($updates[0]['message']['chat']['id']);
             $code = $updates[0]['message']['text'];
             $user = User::where('code', $code)->first();
-            print_r(static::$updateId);
             static::$updateId = $updates[0]['update_id'] + 1;
-            print_r(static::$updateId);
             if (!$user) {
                 $this->telegram->sendMessage(['chat_id' => $chatId, 'text' => 'Verification code is not correct']);
             } else {
@@ -38,6 +36,13 @@ class TelegramBot
                 $this->telegram->sendMessage(['chat_id' => $chatId, 'text' => "You have been successfully registered"]);
                 return;
             }
+        }
+    }
+
+    public function sendMessage($user, $product)
+    {
+        if ($user->chatId) {
+            $this->telegram->sendMessage(['chat_id' => $user->chatId, 'text' => "$product->name - new price $product->price"]);
         }
     }
 }

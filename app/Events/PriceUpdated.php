@@ -14,12 +14,14 @@ class PriceUpdated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $product;
+
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($product)
     {
-
+        $this->product = $product;
     }
 
     /**
