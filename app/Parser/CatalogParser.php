@@ -40,6 +40,7 @@ abstract class CatalogParser
             return;
         }
         for ($i = 0; $i < count($linksList); $i++) {
+            sleep(5);
             $link = $linksList[$i]->attr('href');
             $parser = new RegardProductParser();
             $parser->parse($this->getHost() . $link);
@@ -50,7 +51,7 @@ abstract class CatalogParser
     {
         for (; $this->catalogNumber < count($this->getCatalogStartPages()); $this->catalogNumber++) {
             while ($this->havePages) {
-                sleep(3);
+                sleep(5);
                 $this->parsePage($this->retrieveCurrentPage());
             }
             $this->havePages = true;
