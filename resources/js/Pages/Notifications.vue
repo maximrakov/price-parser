@@ -40,7 +40,6 @@ export default {
             .then(response => {
                 this.user = response.data;
                 this.rendered = true;
-                console.log(this.user);
                 this.hasChatId = (this.user.chatId !== null);
                 if (!this.hasChatId) {
                     axios.post('api/bot');

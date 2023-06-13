@@ -25,12 +25,3 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/product', [\App\Http\Controllers\IndexController::class, 'product'])->name('product');
     Route::get('/notifications', [\App\Http\Controllers\IndexController::class, 'notifications'])->name('notifications');
 });
-Route::get('/test', function () {
-    $parser = new \App\Parser\RegardCatalogParser();
-    return $parser->crawlingPages();
-});
-
-Route::get('/event', function () {
-    $product = Product::find(3);
-    event(new PriceUpdated($product));
-});

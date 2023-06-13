@@ -2,9 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Product;
-use App\Models\User;
-use App\Parser\RegardProductParser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class UpdateProducts implements ShouldQueue
+class ParseProducts implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,17 +26,7 @@ class UpdateProducts implements ShouldQueue
      */
     public function handle(): void
     {
-//        $products = Product::all();
-//        foreach ($products as $product) {
-//            $link = $product->link;
-//            $this->getParser($link)->parse($link);
-//        }
-    }
-
-    public function getParser($link)
-    {
-        if (str_contains($link, 'regard')) {
-            return new RegardProductParser();
-        }
+        $parser = new \App\Parser\RegardCatalogParser();
+        $parser->crawlingPages();
     }
 }

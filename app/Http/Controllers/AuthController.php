@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,19 +10,21 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use stringEncode\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(StoreUserRequest $request)
     {
-        User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
+        $data = $request->validated();
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
             'code' => $this->generateCode()
         ]);
-        return Inertia::render('Login');
+        return $user;
     }
 
     public function login(Request $request)
@@ -35,8 +38,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('token')->plainTextToken;
         $cookie = cookie('jwt', $token, 1440);
-        return \redirect()
-            ->route('home')
+        return \response('Success')
             ->withCookie($cookie);
     }
 
@@ -48,8 +50,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $cookie = Cookie::forget('jwt');
-        return \redirect()
-            ->route('home')
+        return \response('Success')
             ->withCookie($cookie);
     }
 

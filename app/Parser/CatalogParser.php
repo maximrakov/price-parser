@@ -10,21 +10,22 @@ use Rct567\DomQuery\DomQuery;
 abstract class CatalogParser
 {
     protected $currentPageNumber = 0;
+    protected $catalogNumber = 0;
     protected $havePages = true;
 
     protected function getCurrentPageUrl()
     {
         $this->currentPageNumber++;
-        return $this->getFirstPage() . $this->currentPageNumber;
+        return $this->getCatalogStartPages()[$this->catalogNumber] . $this->currentPageNumber;
     }
 
-    abstract function getFirstPage();
+    abstract function getCatalogStartPages();
 
     abstract function getHost();
 
     protected function retrieveCurrentPage()
     {
-        return file_get_contents('/home/maximrakov/repos/work/price-parser/resources/aba.html');
+        return ParserTools::parse($this->getCurrentPageUrl());
     }
 
     protected function parsePage($page)
@@ -47,8 +48,13 @@ abstract class CatalogParser
 
     public function crawlingPages()
     {
-//        while ($this->havePages) {
-            $this->parsePage($this->retrieveCurrentPage());
-//        }
+        for (; $this->catalogNumber < count($this->getCatalogStartPages()); $this->catalogNumber++) {
+            while ($this->havePages) {
+                sleep(3);
+                $this->parsePage($this->retrieveCurrentPage());
+            }
+            $this->havePages = true;
+            $this->currentPageNumber = 0;
+        }
     }
 }
