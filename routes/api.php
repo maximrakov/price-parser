@@ -24,5 +24,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user/{userId}/product/{productId}', [\App\Http\Controllers\UserController::class, 'addProduct']);
     Route::delete('/user/{userId}/product/{productId}', [\App\Http\Controllers\UserController::class, 'deleteProduct']);
     Route::get('/user/{userId}/product/{productId}', [\App\Http\Controllers\UserController::class, 'getProduct']);
-    Route::post('/bot', [\App\Http\Controllers\TelegramController::class, 'callBot']);
+    Route::post('/telegramRegistration', [\App\Http\Controllers\TelegramController::class, 'telegramRegistration']);
 });

@@ -29,11 +29,11 @@ class UpdateProducts implements ShouldQueue
      */
     public function handle(): void
     {
-//        $products = Product::all();
-//        foreach ($products as $product) {
-//            $link = $product->link;
-//            $this->getParser($link)->parse($link);
-//        }
+        $products = Product::all();
+        foreach ($products as $product) {
+            $link = $product->link;
+            $this->getParser($link)->parse($link);
+        }
     }
 
     public function getParser($link)

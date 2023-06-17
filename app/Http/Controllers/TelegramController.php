@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Facade;
 
 class TelegramController extends Controller
 {
-    public function callBot()
+    public function telegramRegistration()
     {
         $bot = app()->get(TelegramBot::class);
         $bot->listenUser();
