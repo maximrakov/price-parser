@@ -28,15 +28,15 @@ class UserController extends Controller
     public function addProduct($userId, $productId, Request $request)
     {
         $notificationPrice = $request['notificationPrice'];
-        return $this->product('attach', $userId, $productId, $notificationPrice);
+        return $this->toggleProductForUser('attach', $userId, $productId, $notificationPrice);
     }
 
     public function deleteProduct($userId, $productId)
     {
-        return $this->product('detach', $userId, $productId);
+        return $this->toggleProductForUser('detach', $userId, $productId);
     }
 
-    private function product($action, $userId, $productId, $notificationPrice = null)
+    private function toggleProductForUser($action, $userId, $productId, $notificationPrice = null)
     {
         $user = User::find($userId);
         $product = Product::find($productId);
