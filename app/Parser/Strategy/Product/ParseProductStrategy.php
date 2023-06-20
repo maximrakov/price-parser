@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Parser;
+namespace App\Parser\Strategy\Product;
 
 use App\Events\PriceUpdated;
 use App\Models\Product;
+use App\Parser\ParserTools;
 use DOMWrap\Document;
 
-abstract class ProductParser
+abstract class ParseProductStrategy
 {
     private $link;
 
@@ -24,7 +25,7 @@ abstract class ProductParser
         $dom->html($page);
         $price = $this->parsePrice($dom->find($this->getPriceBlockCssSelector())->text());
         $name = $dom->find($this->getNameBlockCssSelector())->text();
-        $image = 'https://www.regard.ru' . $dom->find($this->getImageBlockCssSelector())->attr('src');
+        $image = $this->getHost() . $dom->find($this->getImageBlockCssSelector())->attr('src');
         $this->persistProduct($link, $name, $price, $image);
     }
 

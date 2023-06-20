@@ -14,13 +14,13 @@ class RegardCatalogParser extends CatalogParser
         return '.CardText_link__C_fPZ';
     }
 
+    function getBlockWithPageAmount()
+    {
+        return '.Pagination_item__link__vQTps';
+    }
+
     function getCatalogStartPages()
     {
         return $this->catalogStartPages;
-    }
-
-    public function getHost()
-    {
-        return 'https://www.regard.ru';
     }
 }

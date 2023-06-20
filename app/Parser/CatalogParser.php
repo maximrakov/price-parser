@@ -2,6 +2,7 @@
 
 namespace App\Parser;
 
+use App\Jobs\ParseCatalogPageJob;
 use App\Models\Product;
 use DOMDocument;
 use DOMWrap\Document;
@@ -11,7 +12,6 @@ abstract class CatalogParser
 {
     protected $currentPageNumber = 0;
     protected $catalogNumber = 0;
-    protected $havePages = true;
 
     protected function getCurrentPageUrl()
     {
@@ -21,40 +21,17 @@ abstract class CatalogParser
 
     abstract function getCatalogStartPages();
 
-    abstract function getHost();
-
-    protected function retrieveCurrentPage()
-    {
-        return ParserTools::parse($this->getCurrentPageUrl());
-    }
-
-    protected function parsePage($page)
-    {
-        $dom = new Document();
-        $dom->html($page);
-        $links = $dom->find($this->getLinkBlockCssSelector());
-        $linksList = $links->each(function ($node) {
-        });
-        if (count($linksList) == 0) {
-            $this->havePages = false;
-            return;
-        }
-        for ($i = 0; $i < count($linksList); $i++) {
-            sleep(5);
-            $link = $linksList[$i]->attr('href');
-            $parser = new RegardProductParser();
-            $parser->parse($this->getHost() . $link);
-        }
-    }
-
     public function crawlingPages()
     {
+        $startPage = ParserTools::parse($this->getCatalogStartPages()[0]);
+        $dom = new Document();
+        $dom->html($startPage);
+        $pageCount = intval($dom->find($this->getBlockWithPageAmount())->text());
         for (; $this->catalogNumber < count($this->getCatalogStartPages()); $this->catalogNumber++) {
-            while ($this->havePages) {
-                sleep(5);
-                $this->parsePage($this->retrieveCurrentPage());
+            for ($i = 0; $i < $pageCount; $i++) {
+                $url = $this->getCurrentPageUrl();
+                dispatch(new ParseCatalogPageJob($url));
             }
-            $this->havePages = true;
             $this->currentPageNumber = 0;
         }
     }

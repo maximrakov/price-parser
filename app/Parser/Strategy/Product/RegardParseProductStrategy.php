@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Parser;
+namespace App\Parser\Strategy\Product;
 
-class RegardProductParser extends ProductParser
+class RegardParseProductStrategy extends ParseProductStrategy
 {
     function getPriceBlockCssSelector()
     {

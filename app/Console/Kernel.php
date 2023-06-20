@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Jobs\UpdateProducts;
+use App\Jobs\UpdateProductsJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->job(new UpdateProducts)->everyMinute();
+        $schedule->job(new UpdateProductsJob)->everyMinute();
     }
 
     /**
