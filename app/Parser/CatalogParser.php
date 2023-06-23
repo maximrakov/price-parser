@@ -26,13 +26,21 @@ abstract class CatalogParser
         $startPage = ParserTools::parse($this->getCatalogStartPages()[0]);
         $dom = new Document();
         $dom->html($startPage);
-        $pageCount = intval($dom->find($this->getBlockWithPageAmount())->text());
+        $pageAmount = $this->getPageAmount($dom);
         for (; $this->catalogNumber < count($this->getCatalogStartPages()); $this->catalogNumber++) {
-            for ($i = 0; $i < $pageCount; $i++) {
+            for ($i = 0; $i < $pageAmount; $i++) {
                 $url = $this->getCurrentPageUrl();
                 dispatch(new ParseCatalogPageJob($url));
             }
             $this->currentPageNumber = 0;
         }
+    }
+
+    private function getPageAmount($dom)
+    {
+        $pageNumbers = $dom->find($this->getBlockWithPageNumber());
+        $pageNumbers = $pageNumbers->each(function ($node) {
+        });
+        return $pageNumbers[count($pageNumbers) - 1]->text();
     }
 }

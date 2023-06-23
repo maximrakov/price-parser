@@ -3,14 +3,13 @@
 namespace App\Parser\Strategy\Catalog;
 
 use App\Jobs\ParseCatalogPageJob;
+use App\Jobs\ParseProductPageJob;
 use App\Parser\ParserTools;
 use DOMWrap\Document;
 
 abstract class ParseCatalogPageStrategy
 {
     abstract function getLinkBlockCssSelector();
-
-    abstract function getProductClass();
 
     abstract function getHost();
 
@@ -23,10 +22,8 @@ abstract class ParseCatalogPageStrategy
         $linksList = $links->each(function ($node) {
         });
         for ($i = 0; $i < count($linksList); $i++) {
-            sleep(10);
             $link = $linksList[$i]->attr('href');
-            $parser = new ($this->getProductClass());
-            $parser->parse($this->getHost() . $link);
+            dispatch(new ParseProductPageJob($this->getHost() . $link));
         }
     }
 }

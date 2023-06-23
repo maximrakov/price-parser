@@ -6,6 +6,7 @@ use App\Parser\ParserTools;
 use App\Parser\Strategy\Catalog\ParseCatalogPageStrategy;
 use App\Parser\Strategy\Catalog\RegardParseCatalogPageStrategy;
 use DOMWrap\Document;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,6 +22,8 @@ class ParseCatalogPageJob implements ShouldQueue
      * Create a new job instance.
      */
     private $url;
+    public $timeout = 120;
+    public $failOnTimeout = false;
 
     public function __construct($url)
     {
@@ -32,6 +35,7 @@ class ParseCatalogPageJob implements ShouldQueue
      */
     public function handle(): void
     {
+        sleep(3);
         $parseCatalogPageStrategy = $this->getParseCatalogPageStrategyByUrl();
         $parseCatalogPageStrategy->handle($this->url);
     }

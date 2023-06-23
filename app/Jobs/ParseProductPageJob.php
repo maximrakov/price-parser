@@ -2,9 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Product;
-use App\Models\User;
-use App\Parser\RegardProductParser;
 use App\Parser\Strategy\Product\RegardParseProductStrategy;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -13,15 +10,18 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class UpdateProductsJob implements ShouldQueue
+class ParseProductPageJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    private $url;
+
+    public function __construct($url)
     {
+        $this->url = $url;
     }
 
     /**
@@ -29,10 +29,15 @@ class UpdateProductsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $products = Product::all();
-        foreach ($products as $product) {
-            $link = $product->link;
-            dispatch(new ParseProductPageJob($link));
+        sleep(3);
+        $this->getParser()
+            ->parse($this->url);
+    }
+
+    public function getParser()
+    {
+        if (str_contains($this->url, 'regard')) {
+            return new RegardParseProductStrategy();
         }
     }
 }

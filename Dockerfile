@@ -38,7 +38,5 @@ RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
     install-php-extensions http
 
 RUN composer install
-RUN npm run build
 EXPOSE 8000
 CMD sh /var/www/html/docker/entrypoint.sh
-

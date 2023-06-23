@@ -16,6 +16,7 @@ abstract class ParseProductStrategy
     abstract function getNameBlockCssSelector();
 
     abstract function getImageBlockCssSelector();
+
     abstract function getHost();
 
     public function parse($link)

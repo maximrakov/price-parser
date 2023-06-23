@@ -17,9 +17,14 @@ export default defineConfig({
             },
         }),
     ],
-    server: {
-        hmr: {
-            host: '0.0.0.0',
-        },
-    }
+    // server: {
+    //     proxy: {
+    //         '/@vite': {
+    //             target: 'http://0.0.0.0:5173',
+    //             changeOrigin: true,
+    //             secure: false,
+    //             rewrite: (path) => path.replace(/^\/@vite/, '')
+    //         }
+    //     }
+    // }
 });

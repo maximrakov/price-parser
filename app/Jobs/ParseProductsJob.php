@@ -18,7 +18,6 @@ class ParseProductsJob implements ShouldQueue
      */
     public function __construct()
     {
-        //
     }
 
     /**
