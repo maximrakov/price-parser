@@ -1,0 +1,40 @@
+version: '3'
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8000:8000"
+        volumes:
+            - .:/var/www/html
+        environment:
+            - PMA_HOST=host.docker.internal
+            - APP_ENV=local
+            - APP_DEBUG=true
+            - APP_KEY=base64:YOUR_APP_KEY
+            - DB_CONNECTION=mysql
+            - DB_HOST=mysql
+            - DB_PORT=3306
+            - DB_DATABASE=price_parser
+            - DB_USERNAME=root
+            - DB_PASSWORD=password
+        depends_on:
+            - mysql
+        networks:
+            - app-network
+    mysql:
+        image: mysql:8.0
+        restart: always
+        environment:
+            - MYSQL_DATABASE=price_parser
+            - MYSQL_USER=admin
+            - MYSQL_PASSWORD=password
+            - MYSQL_ROOT_PASSWORD=password
+        ports:
+            - "3306:3306"
+        networks:
+            - app-network
+networks:
+    app-network:
+        driver: bridge
