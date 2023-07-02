@@ -1,15 +1,19 @@
 <?php
 
-namespace App\Parser;
+namespace App\Parser\Dom;
 
 use App\Jobs\ParseCatalogPageJob;
-use App\Models\Product;
-use DOMDocument;
+use App\Parser\CustomCurl;
 use DOMWrap\Document;
-use Rct567\DomQuery\DomQuery;
 
 abstract class CatalogParser
 {
+    protected $curl;
+
+    public function __construct()
+    {
+        $curl = new CustomCurl();
+    }
     protected $currentPageNumber = 0;
     protected $catalogNumber = 0;
 
@@ -23,7 +27,7 @@ abstract class CatalogParser
 
     public function crawlingPages()
     {
-        $startPage = ParserTools::parse($this->getCatalogStartPages()[0]);
+        $startPage = CustomCurl::parse($this->getCatalogStartPages()[0]);
         $dom = new Document();
         $dom->html($startPage);
         $pageAmount = $this->getPageAmount($dom);

@@ -2,13 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Parser\ParserTools;
-use App\Parser\Strategy\Catalog\ParseCatalogPageStrategy;
-use App\Parser\Strategy\Catalog\RegardParseCatalogPageStrategy;
-use DOMWrap\Document;
-use Exception;
+use App\Parser\Dom\Strategy\Catalog\RegardParseCatalogPageStrategy;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;

@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -25,7 +24,7 @@ class ParseProductsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $parser = new \App\Parser\RegardCatalogParser();
+        $parser = new \App\Parser\Dom\RegardCatalogParser();
         $parser->crawlingPages();
     }
 }

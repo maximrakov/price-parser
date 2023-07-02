@@ -4,6 +4,8 @@ use App\Events\PriceUpdated;
 use App\Http\Controllers\IndexController;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,4 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/subscriptions', [\App\Http\Controllers\IndexController::class, 'subscriptions'])->name('subscriptions');
     Route::get('/product', [\App\Http\Controllers\IndexController::class, 'product'])->name('product');
     Route::get('/notifications', [\App\Http\Controllers\IndexController::class, 'notifications'])->name('notifications');
+});
+Route::get('/test', function () {
+    $parser = new \App\Parser\Api\MvideoCatalogParser(118, 'https://www.mvideo.ru/noutbuki-planshety-komputery-8/noutbuki-118');
+    $parser->parse();
 });

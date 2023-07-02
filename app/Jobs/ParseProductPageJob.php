@@ -2,9 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Parser\Strategy\Product\RegardParseProductStrategy;
+use App\Parser\Dom\Strategy\Product\RegardParseProductStrategy;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;

@@ -1,15 +1,24 @@
 <?php
 
-namespace App\Parser\Strategy\Product;
+namespace App\Parser\Dom\Strategy\Product;
 
 use App\Events\PriceUpdated;
 use App\Models\Product;
-use App\Parser\ParserTools;
+use App\Parser\CustomCurl;
+use App\Services\ProductService;
 use DOMWrap\Document;
 
 abstract class ParseProductStrategy
 {
     private $link;
+    private $productService;
+    protected $curl;
+
+    public function __construct()
+    {
+        $this->curl = new CustomCurl();
+        $this->productService = new ProductService();
+    }
 
     abstract function getPriceBlockCssSelector();
 
@@ -21,29 +30,13 @@ abstract class ParseProductStrategy
 
     public function parse($link)
     {
-        $page = ParserTools::parse($link);
+        $page = $this->curl->parse($link);
         $dom = new Document();
         $dom->html($page);
         $price = $this->parsePrice($dom->find($this->getPriceBlockCssSelector())->text());
         $name = $dom->find($this->getNameBlockCssSelector())->text();
         $image = $this->getHost() . $dom->find($this->getImageBlockCssSelector())->attr('src');
-        $this->persistProduct($link, $name, $price, $image);
-    }
-
-    protected function persistProduct($link, $name, $price, $image)
-    {
-        $product = Product::where('link', $link)->first();
-        if ($product == null) {
-            $product = new Product(['link' => $link, 'name' => $name, 'price' => $price, 'image' => $image]);
-            $product->save();
-            $product->priceEntry()->create(['price' => $price, 'time' => date('Y-m-d H:i:s')]);
-        } else {
-            if ($product->price != $price) {
-                $product->price = $price;
-                event(new PriceUpdated($product));
-                $product->priceEntry()->create(['price' => $price, 'time' => date('Y-m-d H:i:s')]);
-            }
-        }
+        $this->productService->save($link, $name, $price, $image);
     }
 
     protected function parsePrice($price)

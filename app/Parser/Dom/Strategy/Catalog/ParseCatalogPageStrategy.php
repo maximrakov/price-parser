@@ -1,21 +1,27 @@
 <?php
 
-namespace App\Parser\Strategy\Catalog;
+namespace App\Parser\Dom\Strategy\Catalog;
 
-use App\Jobs\ParseCatalogPageJob;
 use App\Jobs\ParseProductPageJob;
-use App\Parser\ParserTools;
+use App\Parser\CustomCurl;
 use DOMWrap\Document;
 
 abstract class ParseCatalogPageStrategy
 {
+    protected $curl;
+
+    public function __construct()
+    {
+        $curl = new CustomCurl();
+    }
+
     abstract function getLinkBlockCssSelector();
 
     abstract function getHost();
 
     public function handle($url)
     {
-        $page = ParserTools::parse($url);
+        $page = $this->curl->parse($url);
         $dom = new Document();
         $dom->html($page);
         $links = $dom->find($this->getLinkBlockCssSelector());
