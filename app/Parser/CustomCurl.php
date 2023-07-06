@@ -9,6 +9,12 @@ class CustomCurl
     private $requestMethod = 'GET';
     private $cookie;
     private $postFields = null;
+    private $httpResponseCode;
+
+    public function getHttpResponseCode()
+    {
+        return $this->httpResponseCode;
+    }
 
     public function putHeader($key, $value)
     {
@@ -30,7 +36,7 @@ class CustomCurl
         $this->cookie = $cookie;
     }
 
-    public function transformHeadersArray()
+    private function transformHeadersArray()
     {
         $transformedHeaders = [];
         foreach ($this->httpHeaders as $key => $value) {
@@ -43,6 +49,7 @@ class CustomCurl
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->requestMethod);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->transformHeadersArray($this->httpHeaders));
@@ -59,6 +66,7 @@ class CustomCurl
     {
         $ch = $this->makeCurl($url);
         $response = curl_exec($ch);
+        $this->httpResponseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         mb_detect_encoding($response, 'UTF-8,ISO-8859-15');
         $this->postFields = null;
         return $response;

@@ -28,6 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [\App\Http\Controllers\IndexController::class, 'notifications'])->name('notifications');
 });
 Route::get('/test', function () {
-    $parser = new \App\Parser\Api\MvideoCatalogParser(118, 'https://www.mvideo.ru/noutbuki-planshety-komputery-8/noutbuki-118');
+    $parser = new \App\Parser\Api\MvideoCatalogParser('https://www.mvideo.ru/televizory-i-cifrovoe-tv-1/televizory-65', 65);
     $parser->parse();
 });

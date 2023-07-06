@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Parser\Api\ApiResponseHandler;
+use App\Parser\Api\MvideoCatalogParser;
+use App\Parser\CookieService;
+use App\Services\ProductService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +15,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(CookieService::class, function ($app){
+            return new CookieService();
+        });
+        $this->app->bind(ProductService::class, function ($app){
+            return new ProductService();
+        });
+        $this->app->bind(ApiResponseHandler::class, function ($app){
+            return new ApiResponseHandler();
+        });
     }
 
     /**
