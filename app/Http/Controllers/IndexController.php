@@ -10,6 +10,8 @@ use Inertia\Inertia;
 
 class IndexController extends Controller
 {
+    private $timestampsAmountOnProductPage = 5;
+
     public function index()
     {
         return Inertia::render('Home');
@@ -37,13 +39,19 @@ class IndexController extends Controller
             return Inertia::render('Home', ['error' => 'Incorrect link']);
         }
         return Inertia::render('Product',
-            ['product' => $product, 'priceHistory' => $product->priceEntry()->get()]);
+            ['product' => $product,
+                'priceHistory' => $product->priceEntry()
+                    ->skip(($request['page'] - 1) * $this->timestampsAmountOnProductPage)
+                    ->take($this->timestampsAmountOnProductPage)
+                    ->get()]);
     }
 
-    public function subscriptions()
+    public function subscriptions($page)
     {
         $products = Auth::user()
             ->products()
+            ->skip(($page - 1) * $this->timestampsAmountOnProductPage)
+            ->take($this->timestampsAmountOnProductPage)
             ->get();
         return Inertia::render('Subscriptions', ['products' => $products]);
     }
