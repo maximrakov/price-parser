@@ -4,6 +4,8 @@ use App\Events\PriceUpdated;
 use App\Http\Controllers\IndexController;
 use App\Models\Product;
 use App\Models\User;
+use App\Parser\Dom\Strategy\Catalog\ParseCatalogPageManager;
+use App\Parser\Dom\Strategy\Catalog\RegardParseCatalogPageStrategy;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Http;

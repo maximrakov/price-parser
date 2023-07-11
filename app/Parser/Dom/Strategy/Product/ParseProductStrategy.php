@@ -16,7 +16,6 @@ abstract class ParseProductStrategy
 
     public function __construct()
     {
-        $this->curl = new CustomCurl();
         $this->productService = new ProductService();
     }
 

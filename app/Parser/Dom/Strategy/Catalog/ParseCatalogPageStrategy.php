@@ -5,31 +5,32 @@ namespace App\Parser\Dom\Strategy\Catalog;
 use App\Jobs\ParseProductPageJob;
 use App\Parser\CustomCurl;
 use DOMWrap\Document;
+use Illuminate\Support\Facades\Http;
 
 abstract class ParseCatalogPageStrategy
 {
-    protected $curl;
-
-    public function __construct()
-    {
-        $curl = new CustomCurl();
-    }
-
     abstract function getLinkBlockCssSelector();
 
     abstract function getHost();
 
+    abstract function getParseProductPageStrategy();
+
+    abstract static function apply($url);
+
     public function handle($url)
     {
-        $page = $this->curl->parse($url);
         $dom = new Document();
-        $dom->html($page);
-        $links = $dom->find($this->getLinkBlockCssSelector());
-        $linksList = $links->each(function ($node) {
+        $dom->html($this->getPage($url));
+        $linkBlocks = $dom->find($this->getLinkBlockCssSelector());
+        $linkBlocks->each(function ($linkBlock) {
+            $link = $linkBlock->attr('href');
+            dispatch(new ParseProductPageJob($this->getHost() . $link, $this->getParseProductPageStrategy()));
         });
-        for ($i = 0; $i < count($linksList); $i++) {
-            $link = $linksList[$i]->attr('href');
-            dispatch(new ParseProductPageJob($this->getHost() . $link));
-        }
+    }
+
+    private function getPage($url)
+    {
+        return Http::withHeaders(['user-agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'])
+            ->get($url);
     }
 }

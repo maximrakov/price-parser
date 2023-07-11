@@ -17,10 +17,12 @@ class ParseProductPageJob implements ShouldQueue
      * Create a new job instance.
      */
     private $url;
+    private $strategy;
 
-    public function __construct($url)
+    public function __construct($url, $strategy)
     {
         $this->url = $url;
+        $this->strategy = $strategy;
     }
 
     /**
@@ -29,14 +31,6 @@ class ParseProductPageJob implements ShouldQueue
     public function handle(): void
     {
         sleep(3);
-        $this->getParser()
-            ->parse($this->url);
-    }
-
-    public function getParser()
-    {
-        if (str_contains($this->url, 'regard')) {
-            return new RegardParseProductStrategy();
-        }
+        (new $this->strategy)->parse($this->url);
     }
 }

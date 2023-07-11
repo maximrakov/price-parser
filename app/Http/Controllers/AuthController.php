@@ -56,9 +56,9 @@ class AuthController extends Controller
 
     private function generateCode()
     {
-        $code = rand(1, 1000000000);
+        $code = rand(100000000, 999999999);
         while (User::where('code', $code)->first() != null) {
-            $code = rand(1, 1000000000);
+            $code = rand(100000000, 999999999);
         }
         return $code;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Parser\Dom\Strategy\Catalog\ParseCatalogPageManager;
 use App\Parser\Dom\Strategy\Catalog\RegardParseCatalogPageStrategy;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,12 +32,6 @@ class ParseCatalogPageJob implements ShouldQueue
     public function handle(): void
     {
         sleep(3);
-        $parseCatalogPageStrategy = $this->getParseCatalogPageStrategyByUrl();
-        $parseCatalogPageStrategy->handle($this->url);
-    }
-    public function getParseCatalogPageStrategyByUrl() {
-        if(str_contains($this->url, 'regard')) {
-            return new RegardParseCatalogPageStrategy();
-        }
+        (new (ParseCatalogPageManager::getStrategy($this->url)))->handle($this->url);
     }
 }

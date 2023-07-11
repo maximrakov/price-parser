@@ -5,46 +5,40 @@ namespace App\Parser\Dom;
 use App\Jobs\ParseCatalogPageJob;
 use App\Parser\CustomCurl;
 use DOMWrap\Document;
+use Illuminate\Support\Facades\Http;
 
 abstract class CatalogParser
 {
-    protected $curl;
-
-    public function __construct()
+    public function getStartPages()
     {
-        $curl = new CustomCurl();
+        return collect($this->catalogStartPages);
     }
-    protected $currentPageNumber = 0;
-    protected $catalogNumber = 0;
-
-    protected function getCurrentPageUrl()
-    {
-        $this->currentPageNumber++;
-        return $this->getCatalogStartPages()[$this->catalogNumber] . $this->currentPageNumber;
-    }
-
-    abstract function getCatalogStartPages();
 
     public function crawlingPages()
     {
-        $startPage = CustomCurl::parse($this->getCatalogStartPages()[0]);
+        $this->getStartPages()->each(function ($catalogStartPageUrl) {
+            $this->crawleCatalog($catalogStartPageUrl);
+        });
+    }
+
+    private function getPageAmount($url)
+    {
+        $page = $this->getPage($url);
         $dom = new Document();
-        $dom->html($startPage);
-        $pageAmount = $this->getPageAmount($dom);
-        for (; $this->catalogNumber < count($this->getCatalogStartPages()); $this->catalogNumber++) {
-            for ($i = 0; $i < $pageAmount; $i++) {
-                $url = $this->getCurrentPageUrl();
-                dispatch(new ParseCatalogPageJob($url));
-            }
-            $this->currentPageNumber = 0;
+        $dom->html($page);
+        return $dom->find($this->getBlockWithPageNumber())->last()->text();
+    }
+
+    private function crawleCatalog($catalogStartPageUrl)
+    {
+        for ($pageNumber = 0; $pageNumber < $this->getPageAmount($catalogStartPageUrl); $pageNumber++) {
+            dispatch($catalogStartPageUrl . $pageNumber);
         }
     }
 
-    private function getPageAmount($dom)
+    private function getPage($url)
     {
-        $pageNumbers = $dom->find($this->getBlockWithPageNumber());
-        $pageNumbers = $pageNumbers->each(function ($node) {
-        });
-        return $pageNumbers[count($pageNumbers) - 1]->text();
+        return Http::withHeaders(['user-agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'])
+            ->get($url);
     }
 }
