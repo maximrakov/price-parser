@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Product;
+use App\Parser\Dom\Strategy\Catalog\ParseCatalogPageManager;
 use App\Parser\RegardProductParser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,7 +30,7 @@ class UpdateProductsJob implements ShouldQueue
         $products = Product::all();
         foreach ($products as $product) {
             $link = $product->link;
-            dispatch(new ParseProductPageJob($link));
+            dispatch(new ParseProductPageJob($link, ParseCatalogPageManager::getStrategy($link)));
         }
     }
 }

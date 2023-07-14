@@ -2,7 +2,9 @@
 
 namespace App\Parser\Api;
 
-use App\Parser\CookieService;
+use App\DTO\ProductDTO;
+use App\Parser\CookieRepository;
+use App\Repositories\MvideoRepository;
 use App\Services\ProductService;
 use Illuminate\Support\Facades\Http;
 
@@ -12,7 +14,8 @@ class MvideoCatalogParser
     private $categoryId;
     private $url;
     private $productService;
-    private $cookieService;
+    private $cookieRepository;
+    private $mvideoRepository;
     private $host = 'https://www.mvideo.ru/';
     private $pricesUrl = 'https://www.mvideo.ru/bff/products/prices';
     private $productDetailsUrl = 'https://www.mvideo.ru/bff/product-details/list';
@@ -20,9 +23,10 @@ class MvideoCatalogParser
 
     public function __construct($url, $categoryId)
     {
-        $this->cookieService = new CookieService();
+        $this->cookieRepository = new CookieRepository();
         $this->productService = new ProductService();
         $this->apiResponseHandler = new ApiResponseHandler();
+        $this->mvideoRepository = new MvideoRepository();
         $this->url = $url;
         $this->categoryId = $categoryId;
     }
@@ -34,7 +38,7 @@ class MvideoCatalogParser
             $productsInfo = $this->getInfo($productIdList); // получаем название картинку ссылку на товары
             $prices = $this->getPrices($productIdList); // получаем цену товаров
             foreach ($productsInfo as $id => $info) {
-                $this->productService->save($info['link'], $info['name'], $prices[$id], $info['image']);
+                $this->productService->save(new ProductDTO($info['link'], $info['name'], $prices[$id], $info['image']));
             }
         }
     }
@@ -47,7 +51,7 @@ class MvideoCatalogParser
         $productId = [];
         while ($offset <= $total) {
             sleep(1);
-            $productIds = $this->send('get', $this->getUrlForIdRetrieving($offset, $limit)); // получаем порцию айдишников из каталога с помощью апи
+            $productIds = $this->mvideoRepository->getResponse('get', $this->getUrlForIdRetrieving($offset, $limit), $this->url); // получаем порцию айдишников из каталога с помощью апи
             $productId[] = $this->apiResponseHandler->handle($productIds, 'body.products'); // вытаскиваем айдишники товаров из апи респонса
             $offset += $limit;
         }
@@ -56,13 +60,13 @@ class MvideoCatalogParser
 
     public function getNumberOfProducts()
     {
-        $numberOfProducts = $this->send('get', $this->getUrlForIdRetrieving(0, 24)); // получаем количество товаров в каталоге
+        $numberOfProducts = $this->mvideoRepository->getResponse('get', $this->getUrlForIdRetrieving(0, 24), $this->url); // получаем количество товаров в каталоге
         return $this->apiResponseHandler->handle($numberOfProducts, 'body.total');
     }
 
     public function getPrices($idList): array
     {
-        $pricesData = $this->send('get', $this->getPricesUrl($idList)); // получаем апи респонс с ценами на товар
+        $pricesData = $this->mvideoRepository->getResponse('get', $this->getPricesUrl($idList), $this->url); // получаем апи респонс с ценами на товар
         $prices = [];
         foreach ($this->apiResponseHandler->handle($pricesData, 'body.materialPrices') as $product) {
             $prices[$product->price->productId] = $product->price->salePrice; // вытаскиваем цены из апи респонса
@@ -72,7 +76,7 @@ class MvideoCatalogParser
 
     private function getInfo($idList): array
     {
-        $productsInfoData = $this->send('post', $this->productDetailsUrl, $this->getPostDataForProductInfoRetrieving($idList)); // получаем апи респонс с информацией о товарах список айди которых мы передали
+        $productsInfoData = $this->mvideoRepository->getResponse('post', $this->productDetailsUrl, $this->url, $this->getPostDataForProductInfoRetrieving($idList)); // получаем апи респонс с информацией о товарах список айди которых мы передали
         $products = $this->apiResponseHandler->handle($productsInfoData, 'body.products');
         $productsInfo = [];
         foreach ($products as $product) {
@@ -123,24 +127,5 @@ class MvideoCatalogParser
     private function getUrlWithHost($url) // добавляем вначало хост, если ссылка относительная
     {
         return str_contains($url, $this->host) ? $url : $this->host . $url;
-    }
-
-    public function send($method, $url, $body = null)
-    {
-        $headers = ['user-agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'];
-        $request = Http::withOptions(['cookies' => $this->cookieService->get($this->host)]);
-        if ($body) {
-            $headers['content-type'] = 'application/json';
-            $headers['origin'] = $this->host;
-            $headers['referer'] = $this->url;
-            return $request
-                ->withHeaders($headers)
-                ->$method($url, $body)
-                ->body();
-        }
-        return $request
-            ->withHeaders($headers)
-            ->$method($url)
-            ->body();
     }
 }

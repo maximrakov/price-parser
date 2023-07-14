@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Parser\Api\ApiResponseHandler;
 use App\Parser\Api\MvideoCatalogParser;
-use App\Parser\CookieService;
+use App\Parser\CookieRepository;
 use App\Services\ProductService;
 use Illuminate\Support\ServiceProvider;
 use Telegram\Bot\Api;
@@ -16,8 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(CookieService::class, function ($app) {
-            return new CookieService();
+        $this->app->bind(CookieRepository::class, function ($app) {
+            return new CookieRepository();
         });
         $this->app->bind(ProductService::class, function ($app) {
             return new ProductService();

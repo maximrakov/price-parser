@@ -26,7 +26,7 @@ abstract class CatalogParser
     private function crawleCatalog($catalogStartPageUrl): void
     {
         for ($pageNumber = 0; $pageNumber < $this->getPageAmount($catalogStartPageUrl); $pageNumber++) {
-            dispatch($this->getCatalogPageUrl($catalogStartPageUrl, $pageNumber));
+            dispatch($this->getCatalogPageUrl($catalogStartPageUrl, $pageNumber))->onQueue('parsingQueue');
         }
     }
 
