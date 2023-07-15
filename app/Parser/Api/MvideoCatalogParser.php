@@ -121,7 +121,7 @@ class MvideoCatalogParser
 
     private function getFullProductLink($product): string // получем полный урл к товару по его имени и айди
     {
-        return $this->host . "products" . $product->nameTranslit . '-' . $product->productId;
+        return $this->host . "products/" . $product->nameTranslit . '-' . $product->productId;
     }
 
     private function getUrlWithHost($url) // добавляем вначало хост, если ссылка относительная

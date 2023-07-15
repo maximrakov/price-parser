@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Parser\Api\MvideoCatalogParser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -24,7 +25,7 @@ class ParseProductsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $parser = new \App\Parser\Dom\RegardCatalogParser();
-        $parser->crawlingPages();
+        $parser = new MvideoCatalogParser('https://www.mvideo.ru/noutbuki-planshety-komputery-8/noutbuki-118', 118);
+        $parser->parse('https://www.mvideo.ru/noutbuki-planshety-komputery-8/noutbuki-118');
     }
 }

@@ -10,7 +10,7 @@ class ParseCatalogPageManager
     {
         foreach (self::$strategies as $strategy) {
             if ((new $strategy)::apply($url)) {
-                return $strategy;
+                return new $strategy;
             }
         }
     }

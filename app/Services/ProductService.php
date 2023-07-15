@@ -21,12 +21,14 @@ class ProductService
 
     private function persistProduct($productDTO): void
     {
-        $product = Product::create(['link' => $productDTO->link,
+        $product = new Product(['link' => $productDTO->link,
             'name' => $productDTO->name,
             'price' => $productDTO->price,
             'image' => $productDTO->image,
             'shop_name' => $this->getShopNameByLink($productDTO->link)]);
+        $product->save();
         $this->pushPrice($product, $productDTO->price);
+        $product->save();
     }
 
     private function updatePrice($product, $price): void
@@ -44,7 +46,7 @@ class ProductService
     private function getShopNameByLink($link)
     {
         $subDomains = $this->subDomainsOfNormalizedUrl($link);
-        return $subDomains[count($subDomains) - 2];
+        return ($subDomains)[count($subDomains) - 2];
     }
 
     private function subDomainsOfNormalizedUrl($link)

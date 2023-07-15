@@ -4,12 +4,20 @@ namespace App\Parser\Dom;
 
 use App\Jobs\ParseCatalogPageJob;
 use App\Parser\CustomCurl;
+use App\Parser\Dom\Strategy\Catalog\ParseCatalogPageManager;
 use DOMWrap\Document;
 use Illuminate\Support\Facades\Http;
 
 abstract class CatalogParser
 {
     use DomParserTrait;
+
+    private $manager;
+
+    public function __construct()
+    {
+        $this->manager = new ParseCatalogPageManager();
+    }
 
     public function getCatalogStartPages(): \Illuminate\Support\Collection
     {
@@ -26,7 +34,9 @@ abstract class CatalogParser
     private function crawleCatalog($catalogStartPageUrl): void
     {
         for ($pageNumber = 0; $pageNumber < $this->getPageAmount($catalogStartPageUrl); $pageNumber++) {
-            dispatch($this->getCatalogPageUrl($catalogStartPageUrl, $pageNumber))->onQueue('parsingQueue');
+            $url = $this->getCatalogPageUrl($catalogStartPageUrl, $pageNumber);
+            $strategy = $this->manager->getStrategy($url);
+            $strategy->handle($url);
         }
     }
 
@@ -38,6 +48,6 @@ abstract class CatalogParser
     private function getPageAmount($url)
     {
         $dom = $this->getPageDOM($url);
-        return $dom->find($this->getBlockWithPageNumber())->last()->text();
+        return intval($dom->find($this->getBlockWithPageNumber())->last()->text());
     }
 }

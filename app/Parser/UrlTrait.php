@@ -12,7 +12,9 @@ trait UrlTrait
 
     private function normalizeUrl($url): array|string
     {
-        return str_replace("//", "/", $url);
+        $fixedDoubleSlash = str_replace("//", "/", $url);
+        $fixedDoubleSlashAfterHttp = str_replace("https:/", "https://", $fixedDoubleSlash);
+        return $fixedDoubleSlashAfterHttp;
     }
 
     private function withHost($host, $url)

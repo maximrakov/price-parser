@@ -27,7 +27,7 @@ abstract class ParseCatalogPageStrategy
         $linkBlocks = $this->getLinkBlocks($dom);
         $linkBlocks->each(function ($linkBlock) {
             $link = $linkBlock->attr('href');
-            dispatch(new ParseProductPageJob($this->getFullNormalizedUrl($this->getHost(), $link), $this->getParseProductPageStrategy()));
+            dispatch(new ParseProductPageJob($this->getFullNormalizedUrl($this->getHost(), $link), $this->getParseProductPageStrategy()))->onQueue('parsingQueue');
         });
     }
 
