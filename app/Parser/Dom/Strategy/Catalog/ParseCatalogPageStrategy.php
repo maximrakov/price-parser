@@ -2,12 +2,10 @@
 
 namespace App\Parser\Dom\Strategy\Catalog;
 
-use App\Jobs\ParseProductPageJob;
+use App\Jobs\Parsing\Dom\ParseProductPageJob;
 use App\Parser\CustomCurl;
 use App\Parser\Dom\DomParserTrait;
 use App\Parser\UrlTrait;
-use DOMWrap\Document;
-use Illuminate\Support\Facades\Http;
 
 abstract class ParseCatalogPageStrategy
 {

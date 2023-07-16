@@ -25,7 +25,9 @@ class ProductService
             'name' => $productDTO->name,
             'price' => $productDTO->price,
             'image' => $productDTO->image,
-            'shop_name' => $this->getShopNameByLink($productDTO->link)]);
+            'shop_name' => $this->getShopNameByLink($productDTO->link),
+            'parsing_way' => $productDTO->parsingWay
+        ]);
         $product->save();
         $this->pushPrice($product, $productDTO->price);
         $product->save();

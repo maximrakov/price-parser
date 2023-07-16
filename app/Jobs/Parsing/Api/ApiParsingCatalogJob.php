@@ -1,28 +1,27 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Parsing\Api;
 
-use App\Parser\Dom\Strategy\Product\RegardParseProductStrategy;
+use App\Parser\Api\CatalogParser;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ParseProductPageJob implements ShouldQueue
+class ApiParsingCatalogJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    private CatalogParser $parser;
 
     /**
      * Create a new job instance.
      */
-    private $url;
-    private $strategy;
-
-    public function __construct($url, $strategy)
+    public function __construct(CatalogParser $parser)
     {
-        $this->url = $url;
-        $this->strategy = $strategy;
+        $this->parser = $parser;
     }
 
     /**
@@ -30,7 +29,6 @@ class ParseProductPageJob implements ShouldQueue
      */
     public function handle(): void
     {
-        sleep(3);
-        (new $this->strategy)->parse($this->url);
+        $this->parser->parse();
     }
 }

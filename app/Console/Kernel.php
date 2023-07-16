@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Jobs\UpdateProductsJob;
+use App\Jobs\Parsing\UpdateProductsJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

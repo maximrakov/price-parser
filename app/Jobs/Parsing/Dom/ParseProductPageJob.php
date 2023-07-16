@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Parsing\Dom;
 
-use App\Parser\Dom\Strategy\Catalog\ParseCatalogPageManager;
-use App\Parser\Dom\Strategy\Catalog\RegardParseCatalogPageStrategy;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ParseCatalogPageJob implements ShouldQueue
+class ParseProductPageJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -18,12 +16,12 @@ class ParseCatalogPageJob implements ShouldQueue
      * Create a new job instance.
      */
     private $url;
-    public $timeout = 120;
-    public $failOnTimeout = false;
+    private $strategy;
 
-    public function __construct($url)
+    public function __construct($url, $strategy)
     {
         $this->url = $url;
+        $this->strategy = $strategy;
     }
 
     /**
@@ -32,6 +30,6 @@ class ParseCatalogPageJob implements ShouldQueue
     public function handle(): void
     {
         sleep(3);
-        (new (ParseCatalogPageManager::getStrategy($this->url)))->handle($this->url);
+        (new $this->strategy)->parse($this->url);
     }
 }

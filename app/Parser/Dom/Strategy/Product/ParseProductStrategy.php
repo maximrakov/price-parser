@@ -38,7 +38,7 @@ abstract class ParseProductStrategy
         $price = $this->getPrice($dom);
         $name = $this->getName($dom);
         $image = $this->getImage($dom);
-        $this->productService->save(new ProductDTO($link, $name, $price, $image));
+        $this->productService->save(new ProductDTO($link, $name, $price, $image, 'dom'));
     }
 
     protected function parsePrice($price): int

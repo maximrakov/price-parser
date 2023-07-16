@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Parser\Api;
+namespace App\Parser\Api\Mvideo;
 
 use App\DTO\ProductDTO;
+use App\Parser\Api\ApiResponseHandler;
+use App\Parser\Api\CatalogParser;
 use App\Parser\CookieRepository;
 use App\Repositories\MvideoRepository;
 use App\Services\ProductService;
-use Illuminate\Support\Facades\Http;
 
-class MvideoCatalogParser
+class MvideoCatalogParser implements CatalogParser
 {
     private ApiResponseHandler $apiResponseHandler;
     private $categoryId;
@@ -38,7 +39,7 @@ class MvideoCatalogParser
             $productsInfo = $this->getInfo($productIdList); // получаем название картинку ссылку на товары
             $prices = $this->getPrices($productIdList); // получаем цену товаров
             foreach ($productsInfo as $id => $info) {
-                $this->productService->save(new ProductDTO($info['link'], $info['name'], $prices[$id], $info['image']));
+                $this->productService->save(new ProductDTO($info['link'], $info['name'], $prices[$id], $info['image'], 'api'));
             }
         }
     }

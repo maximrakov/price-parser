@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Jobs\ParseProductsJob;
+use App\Jobs\Parsing\ParseProductsJob;
 use Illuminate\Console\Command;
 
 class ParseProductsCommand extends Command

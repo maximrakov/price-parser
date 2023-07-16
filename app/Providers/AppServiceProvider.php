@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Parser\Api\ApiResponseHandler;
-use App\Parser\Api\MvideoCatalogParser;
 use App\Parser\CookieRepository;
 use App\Services\ProductService;
 use Illuminate\Support\ServiceProvider;

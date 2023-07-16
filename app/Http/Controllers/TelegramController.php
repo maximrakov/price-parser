@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bot\TelegramBot;
-use App\Jobs\TelegramBindingJob;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Facade;
+use App\Jobs\Telegram\TelegramBindingJob;
 
 class TelegramController extends Controller
 {

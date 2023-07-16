@@ -8,12 +8,14 @@ class ProductDTO
     public $name;
     public $price;
     public $image;
+    public $parsingWay;
 
-    public function __construct($link, $name, $price, $image)
+    public function __construct($link, $name, $price, $image, $parsingWay)
     {
         $this->name = $name;
         $this->link = $link;
         $this->price = $price;
         $this->image = $image;
+        $this->parsingWay = $parsingWay;
     }
 }

@@ -2,11 +2,8 @@
 
 namespace App\Parser\Dom;
 
-use App\Jobs\ParseCatalogPageJob;
 use App\Parser\CustomCurl;
 use App\Parser\Dom\Strategy\Catalog\ParseCatalogPageManager;
-use DOMWrap\Document;
-use Illuminate\Support\Facades\Http;
 
 abstract class CatalogParser
 {
