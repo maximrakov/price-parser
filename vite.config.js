@@ -17,4 +17,14 @@ export default defineConfig({
             },
         }),
     ],
+    // server: {
+    //     proxy: {
+    //         '/@vite': {
+    //             target: 'http://0.0.0.0:5173',
+    //             changeOrigin: true,
+    //             secure: false,
+    //             rewrite: (path) => path.replace(/^\/@vite/, '')
+    //         }
+    //     }
+    // }
 });
