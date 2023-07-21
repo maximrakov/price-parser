@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Parser\Strategy\Product;
+namespace App\Parser\Dom\Strategy\Product;
 
 class RegardParseProductStrategy extends ParseProductStrategy
 {
@@ -19,7 +19,8 @@ class RegardParseProductStrategy extends ParseProductStrategy
         return '.BigSlider_slide__image__2qjPm';
     }
 
-    public function getHost() {
+    public function getHost()
+    {
         return 'https://www.regard.ru';
     }
 }

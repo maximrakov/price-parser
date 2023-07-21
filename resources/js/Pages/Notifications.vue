@@ -42,7 +42,7 @@ export default {
                 this.rendered = true;
                 this.hasChatId = (this.user.chatId !== null);
                 if (!this.hasChatId) {
-                    axios.post('api/telegramRegistration');
+                    axios.post('api/telegramBinding');
                 }
             });
     },

@@ -15,7 +15,9 @@ class Product extends Model
         'link',
         'name',
         'price',
-        'image'
+        'image',
+        'shop_name',
+        'parsing_way'
     ];
 
     public function priceEntry(): HasMany

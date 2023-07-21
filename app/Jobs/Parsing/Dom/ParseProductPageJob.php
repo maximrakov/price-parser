@@ -1,23 +1,27 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Parsing\Dom;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ParseProductsJob implements ShouldQueue
+class ParseProductPageJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    private $url;
+    private $strategy;
+
+    public function __construct($url, $strategy)
     {
+        $this->url = $url;
+        $this->strategy = $strategy;
     }
 
     /**
@@ -25,7 +29,7 @@ class ParseProductsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $parser = new \App\Parser\RegardCatalogParser();
-        $parser->crawlingPages();
+        sleep(3);
+        (new $this->strategy)->parse($this->url);
     }
 }

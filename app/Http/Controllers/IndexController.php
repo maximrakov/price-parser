@@ -10,6 +10,8 @@ use Inertia\Inertia;
 
 class IndexController extends Controller
 {
+    private $elementsOnPage = 5;
+
     public function index()
     {
         return Inertia::render('Home');
@@ -37,19 +39,38 @@ class IndexController extends Controller
             return Inertia::render('Home', ['error' => 'Incorrect link']);
         }
         return Inertia::render('Product',
-            ['product' => $product, 'priceHistory' => $product->priceEntry()->get()]);
+            ['product' => $product,
+                'priceHistory' => $product->priceEntry()
+                    ->skip(($request['page'] - 1) * $this->elementsOnPage)
+                    ->take($this->elementsOnPage)
+                    ->get()]);
     }
 
-    public function subscriptions()
+    public function subscriptions($page)
     {
+        $productsAmount = Auth::user()->products()->count('link');
         $products = Auth::user()
             ->products()
+            ->skip(($page - 1) * $this->elementsOnPage)
+            ->take($this->elementsOnPage)
             ->get();
-        return Inertia::render('Subscriptions', ['products' => $products]);
+        return Inertia::render('Subscriptions', ['products' => $products,
+            'pageAmount' => $this->calcPageAmount($productsAmount, $this->elementsOnPage),
+            'elementsOnPage' => $this->elementsOnPage,
+            'currentPage' => $page]);
     }
 
     public function notifications()
     {
         return Inertia::render('Notifications');
+    }
+
+    private function calcPageAmount($productsAmount, $elementsOnPage)
+    {
+        if ($productsAmount % $elementsOnPage === 0) {
+            return intval($productsAmount / $elementsOnPage);
+        } else {
+            return intval($productsAmount / $elementsOnPage) + 1;
+        }
     }
 }

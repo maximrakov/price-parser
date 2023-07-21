@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Parser;
+namespace App\Parser\Dom;
+
+use App\Parser\Dom\Strategy\Product\RegardParseProductStrategy;
 
 class RegardCatalogParser extends CatalogParser
 {
-    private $catalogStartPages = [
+    protected $catalogStartPages = [
         'https://www.regard.ru/catalog/new?page=',
         'https://www.regard.ru/catalog/1015/nakopiteli-ssd?page=',
         'https://www.regard.ru/catalog/1127/noutbuki?page='
@@ -18,10 +20,5 @@ class RegardCatalogParser extends CatalogParser
     function getBlockWithPageNumber()
     {
         return '.Pagination_item__link__vQTps';
-    }
-
-    function getCatalogStartPages()
-    {
-        return $this->catalogStartPages;
     }
 }

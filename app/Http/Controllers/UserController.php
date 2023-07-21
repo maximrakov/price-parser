@@ -38,15 +38,9 @@ class UserController extends Controller
 
     private function toggleProductForUser($action, $userId, $productId, $notificationPrice = null)
     {
-        $user = User::find($userId);
-        $product = Product::find($productId);
-        if (!$user || !$product) {
-            $notFoundResourse = (!$user and !$product) ? 'user and product' : (!$user ? 'user' : 'product');
-            return response("$notFoundResourse not found", 404);
-        }
-        $userHasProduct = ($user->products()->find($productId) !== null) && ($action === 'save');
-        $userHasNotProduct = ($user->products()->find($productId) === null) && ($action === 'detach');
-        if ($userHasProduct || $userHasNotProduct) {
+        $validated = $this->validateUserAndProduct($userId, $productId);
+        $user = $validated['user'];
+        if (!$this->validateToggleOperation($user, $productId, $action)) {
             return response('conflict', 409);
         }
         if ($notificationPrice) {
@@ -54,5 +48,26 @@ class UserController extends Controller
         } else {
             return $user->products()->$action($productId);
         }
+    }
+
+    private function validateUserAndProduct($userId, $productId): \Illuminate\Foundation\Application|\Illuminate\Http\Response|array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    {
+        $user = User::find($userId);
+        $product = Product::find($productId);
+        if (!$user || !$product) {
+            $notFoundResourse = (!$user and !$product) ? 'user and product' : (!$user ? 'user' : 'product');
+            return response("$notFoundResourse not found", 404);
+        }
+        return ['user' => $user, 'product' => $product];
+    }
+
+    private function validateToggleOperation($user, $productId, $action)
+    {
+        $userHasProduct = ($user->products()->find($productId) !== null) && ($action === 'save');
+        $userHasNotProduct = ($user->products()->find($productId) === null) && ($action === 'detach');
+        if ($userHasProduct || $userHasNotProduct) {
+            return false;
+        }
+        return true;
     }
 }
