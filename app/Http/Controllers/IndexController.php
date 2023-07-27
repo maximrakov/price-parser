@@ -22,9 +22,9 @@ class IndexController extends Controller
         return Inertia::render('Register');
     }
 
-    public function login()
+    public function login(Request $request)
     {
-        return Inertia::render('Login');
+        return Inertia::render('Login', ['redirectTo' => $request['redirectTo']]);
     }
 
     public function product(Request $request)
