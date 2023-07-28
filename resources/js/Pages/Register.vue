@@ -71,7 +71,7 @@ export default {
             }).then(response => {
                 this.message = 'You have been successfully registered';
             }).catch(
-                response => this.error = 'Bad Input'
+                error => this.error = error.response.data.message
             );
         },
     },
