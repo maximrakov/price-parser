@@ -21,6 +21,6 @@ class RegardParseProductStrategy extends ParseProductStrategy
 
     public function getHost()
     {
-        return 'https://www.regard.ru';
+        return config('constants.host.regard');
     }
 }

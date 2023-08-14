@@ -62,9 +62,10 @@ export default {
                 name: this.name,
                 email: this.email,
                 password: this.password,
-                redirectTo: this.redirectTo
             }).then(response => {
-                window.location = this.redirectTo;
+                if(this.redirectTo) {
+                    window.location = this.redirectTo;
+                }
             }).catch(
                 response => this.error = 'Bad credentials'
             );

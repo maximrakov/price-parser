@@ -30,7 +30,6 @@ class ParseCatalogPageJob implements ShouldQueue
      */
     public function handle(): void
     {
-        sleep(3);
         (new (ParseCatalogPageManager::getStrategy($this->url)))->handle($this->url);
     }
 }

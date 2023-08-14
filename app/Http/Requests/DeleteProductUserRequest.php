@@ -2,16 +2,18 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
-class StoreProductRequest extends FormRequest
+class DeleteProductUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,5 +26,14 @@ class StoreProductRequest extends FormRequest
         return [
             //
         ];
+    }
+    public function all($keys = null)
+    {
+        $user = User::find($this->route('userId'));
+        $productId = $this->route('productId');
+        if ($user->products()->find($productId) === null) {
+            throw new ConflictHttpException();
+        }
+        return parent::all();
     }
 }
