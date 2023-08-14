@@ -18,7 +18,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
-    'telegram.bot_token' => '5860112528:AAFaG361LEIqWhLwEmOg32HKoREs7iCfHBc',
+    'telegram.bot_token' => env('TELEGRAM_BOT_TOKEN', 'token'),
     /*
     |--------------------------------------------------------------------------
     | Application Environment

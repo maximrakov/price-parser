@@ -14,7 +14,7 @@
     </ul>
     <div>
         <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-            <a :href="currentPage - 1"
+            <a :href="gePreviousPageUrl()"
                class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                 <span class="sr-only">Previous</span>
                 <ChevronLeftIcon class="h-5 w-5" aria-hidden="true"/>
@@ -22,7 +22,7 @@
             <ul class="inline-flex">
                 <li v-for="pageNumber in getPageRange()">
                     <a :class="getClassForPaginationBlock(pageNumber)"
-                       v-bind:href="pageNumber">
+                       v-bind:href="getUrlForPage(pageNumber)">
                         {{ pageNumber }}
                     </a>
                 </li>
@@ -31,12 +31,12 @@
                         class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">...</span>
                 </li>
                 <li>
-                    <a v-bind:href="pageAmount" :class="getClassForPaginationBlock(pageAmount)">
+                    <a v-bind:href="getUrlForPage(pageAmount)" :class="getClassForPaginationBlock(pageAmount)">
                         {{ pageAmount }}
                     </a>
                 </li>
                 <li>
-                    <a :href="parseInt(currentPage) + 1"
+                    <a :href="getNextPageUrl()"
                        class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                         <span class="sr-only">Next</span>
                         <ChevronRightIcon class="h-5 w-5" aria-hidden="true"/>
@@ -69,6 +69,15 @@ export default {
             } else {
                 return "relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0";
             }
+        },
+        getNextPageUrl() {
+            return this.getUrlForPage(Math.min(this.pageAmount, this.currentPage + 1));
+        },
+        gePreviousPageUrl() {
+            return this.getUrlForPage(Math.max(1, this.currentPage - 1));
+        },
+        getUrlForPage(page) {
+            return '?page=' + page;
         }
     },
     props: {

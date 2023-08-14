@@ -57,7 +57,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="(price, index) in priceHistory" :key="index">
-                    <td class="border px-4 py-2">{{ price.time }}</td>
+                    <td class="border px-4 py-2">{{ price.created_at }}</td>
                     <td class="border px-4 py-2 text">{{ price.price }}</td>
                 </tr>
                 </tbody>
@@ -85,8 +85,7 @@ export default {
         toggleSubscription() {
             if(this.hasProduct){
                 let url = 'api/user/' + this.user.id + '/product/' + this.product.id;
-                axios.delete(url);
-                this.updateProductExistence();
+                axios.delete(url).then(response => {this.updateProductExistence();});
             } else {
                 this.showPriceDialog = true;
                 if (this.user['chatId'] === null) {
@@ -102,7 +101,7 @@ export default {
         closePriceDialog() {
             this.showPriceDialog = false;
             let url = 'api/user/' + this.user.id + '/product/' + this.product.id;
-            axios.post(url, {notificationPrice: this.notificationPrice});
+            axios.post(url, {notificationPrice: this.notificationPrice}).then(response => {this.updateProductExistence();});
             this.updateProductExistence();
         },
 

@@ -3,9 +3,9 @@
 namespace App\Parser\Api\Mvideo;
 
 use App\Jobs\Parsing\Api\ApiParsingCatalogJob;
-use App\Parser\Api\ApiParser;
+use App\Parser\ShopParser;
 
-class MvideoParser implements ApiParser
+class MvideoParser implements ShopParser
 {
     public $catalogs = [['https://www.mvideo.ru/televizory-i-cifrovoe-tv-1/televizory-65', 65],
         ['https://www.mvideo.ru/holodilniki-i-morozilniki-2687/holodilniki-i-morozilnye-kamery-159', 159]];

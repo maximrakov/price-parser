@@ -1,8 +1,10 @@
 <?php
 
+use App\DTO\ProductDTO;
 use App\Events\PriceUpdated;
 use App\Http\Controllers\IndexController;
 use App\Models\Product;
+use App\Models\Shop;
 use App\Models\User;
 use App\Parser\Dom\Strategy\Catalog\ParseCatalogPageManager;
 use App\Parser\Dom\Strategy\Catalog\RegardParseCatalogPageStrategy;
@@ -29,9 +31,18 @@ Route::get('/', [\App\Http\Controllers\IndexController::class, 'index'])->name('
 Route::get('/register', [\App\Http\Controllers\IndexController::class, 'register'])->name('register');
 Route::get('/login', [\App\Http\Controllers\IndexController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/subscriptions/{page}', [\App\Http\Controllers\IndexController::class, 'subscriptions'])->name('subscriptions');
+    Route::get('/subscriptions', [\App\Http\Controllers\IndexController::class, 'subscriptions'])->name('subscriptions');
     Route::get('/product', [\App\Http\Controllers\IndexController::class, 'product'])->name('product');
     Route::get('/notifications', [\App\Http\Controllers\IndexController::class, 'notifications'])->name('notifications');
 });
 Route::get('/test', function () {
+    dd(config('constants.host.regard'));
+    Shop::create(['name'=>'regard',
+        'parser' => '\App\Parser\Dom\RegardParser',
+        'parsing_way' => 'dom'
+        ]);
+    Shop::create(['name'=>'mvideo',
+        'parser' => '\App\Parser\Api\Mvideo\MvideoParser',
+        'parsing_way' => 'api'
+    ]);
 });

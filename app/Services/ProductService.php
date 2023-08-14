@@ -26,7 +26,8 @@ class ProductService
             'price' => $productDTO->price,
             'image' => $productDTO->image,
             'shop_name' => $this->getShopNameByLink($productDTO->link),
-            'parsing_way' => $productDTO->parsingWay
+            'parsing_way' => $productDTO->parsingWay,
+            'shop' => $productDTO->shopId
         ]);
         $product->save();
         $this->pushPrice($product, $productDTO->price);
@@ -42,7 +43,7 @@ class ProductService
 
     private function pushPrice($product, $price): void
     {
-        $product->priceEntry()->create(['price' => $price, 'time' => date('Y-m-d H:i:s')]);
+        $product->priceEntry()->create(['price' => $price]);
     }
 
     private function getShopNameByLink($link)

@@ -2,10 +2,9 @@
 
 namespace App\Parser\Dom;
 
-use App\Parser\CustomCurl;
 use App\Parser\Dom\Strategy\Catalog\ParseCatalogPageManager;
 
-abstract class CatalogParser
+abstract class CatalogParser implements \App\Parser\CatalogParser
 {
     use DomParserTrait;
 
@@ -21,7 +20,7 @@ abstract class CatalogParser
         return collect($this->catalogStartPages);
     }
 
-    public function crawlingPages(): void
+    public function parse(): void
     {
         $this->getCatalogStartPages()->each(function ($catalogStartPageUrl) {
             $this->crawleCatalog($catalogStartPageUrl);

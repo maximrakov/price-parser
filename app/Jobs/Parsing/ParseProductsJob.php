@@ -2,10 +2,9 @@
 
 namespace App\Jobs\Parsing;
 
-use App\Jobs\Parsing\Api\ApiParsingJob;
-use App\Jobs\Parsing\Dom\DomParsingJob;
-use App\Parser\Api\Mvideo\MvideoParser;
-use App\Parser\Dom\RegardCatalogParser;
+use App\Jobs\ExecuteParsingJob;
+use App\Models\Shop;
+//use App\Parser\Api\Mvideo\MvideoParser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -19,8 +18,14 @@ class ParseProductsJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    private ?Shop $shop;
+    public function __construct(string $shop=null)
     {
+        if ($shop) {
+            $this->shop = Shop::where('name', $shop)->first();
+        } else {
+            $this->shop = null;
+        }
     }
 
     /**
@@ -28,17 +33,12 @@ class ParseProductsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->runApiJob(new MvideoParser());
-        $this->runDomJob(new RegardCatalogParser());
-    }
-
-    private function runApiJob($parser)
-    {
-        dispatch(new ApiParsingJob($parser))->onQueue('parsingQueue');
-    }
-
-    private function runDomJob($parser)
-    {
-        dispatch(new DomParsingJob($parser))->onQueue('parsingQueue');
+        if ($this->shop) {
+            dispatch(new ExecuteParsingJob(new $this->shop->parser()));
+        } else {
+            Shop::cursor()->each(function (Shop $shop) {
+                dispatch(new ExecuteParsingJob(new $shop->parser()))->onQueue('parsingQueue');
+            });
+        }
     }
 }

@@ -24,6 +24,7 @@
                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 text-center"/>
                     </div>
                 </div>
+
                 <div class="mt-2 text-red-600">
                     {{ error }}
                 </div>
@@ -49,8 +50,11 @@ export default {
             email: '',
             password: '',
             error: '',
-            message: ''
+            message: '',
         };
+    },
+    props: {
+        redirectTo: String
     },
     methods: {
         loginUser() {
@@ -59,7 +63,9 @@ export default {
                 email: this.email,
                 password: this.password,
             }).then(response => {
-                window.location = "/";
+                if(this.redirectTo) {
+                    window.location = this.redirectTo;
+                }
             }).catch(
                 response => this.error = 'Bad credentials'
             );

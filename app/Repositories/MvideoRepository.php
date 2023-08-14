@@ -22,19 +22,15 @@ class MvideoRepository
     public function getResponse($method, $url, $referer, $body = null)
     {
         $headers = ['user-agent' => $this->userAgent];
-        $request = Http::withOptions(['cookies' => $this->cookieRepository->get($this->host)]);
+        $request = Http::retry(3, 3000)->withOptions(['cookies' => $this->cookieRepository->get($this->host)]);
         if ($body) {
             $headers['content-type'] = $this->contentType;
             $headers['origin'] = $this->host;
             $headers['referer'] = $referer;
-            return $request
-                ->withHeaders($headers)
-                ->$method($url, $body)
-                ->body();
         }
         return $request
             ->withHeaders($headers)
-            ->$method($url)
+            ->$method($url, $body)
             ->body();
     }
 }

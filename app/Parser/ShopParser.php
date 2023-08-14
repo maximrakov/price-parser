@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Parser\Api;
+namespace App\Parser;
 
-interface ApiParser
+interface ShopParser
 {
     function run($update = false);
 }

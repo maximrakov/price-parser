@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Parser\Api;
+namespace App\Parser;
 
 interface CatalogParser
 {

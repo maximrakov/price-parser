@@ -2,9 +2,11 @@
 
 namespace App\Jobs\Parsing;
 
+use App\Jobs\ExecuteParsingJob;
 use App\Jobs\Parsing\Api\ApiParsingJob;
 use App\Jobs\Parsing\Dom\ParseProductPageJob;
 use App\Models\Product;
+use App\Models\Shop;
 use App\Parser\Api\Mvideo\MvideoParser;
 use App\Parser\Dom\Strategy\Catalog\ParseCatalogPageManager;
 use App\Parser\RegardProductParser;
@@ -36,17 +38,22 @@ class UpdateProductsJob implements ShouldQueue
 
     private function updateDOMProduct()
     {
-        $products = Product::all();
-        foreach ($products as $product) {
+        Product::cursor()->each(function($product) {
             if ($product->parsingWay === 'dom') {
                 $link = $product->link;
                 dispatch(new ParseProductPageJob($link, ParseCatalogPageManager::getStrategy($link)))->onQueue('updatingQueue');
             }
-        }
+        });
     }
 
     private function updateByAPI()
     {
-        dispatch(new ApiParsingJob(new MvideoParser()))->onQueue('updatingQueue');
+        Shop::cursor()->each(
+            function ($shop) {
+                if ($shop->parsingWay == 'api') {
+                    dispatch(new ExecuteParsingJob(new $shop->parser))->onQueue('updatingQueue');
+                }
+            }
+        );
     }
 }

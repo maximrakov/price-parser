@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Jobs\Parsing\Api;
+namespace App\Jobs;
 
-use App\Parser\Api\ApiParser;
+use App\Parser\CatalogParser;
+use App\Parser\ShopParser;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,18 +11,18 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ApiParsingJob implements ShouldQueue
+class ExecuteParsingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    private ApiParser $parser;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(ApiParser $apiParser)
+    private ShopParser $parser;
+
+    public function __construct(ShopParser $parser)
     {
-        $this->parser = $apiParser;
+        $this->parser = $parser;
     }
 
     /**

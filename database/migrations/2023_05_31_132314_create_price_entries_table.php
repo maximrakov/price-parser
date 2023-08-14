@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('price_entries', function (Blueprint $table) {
             $table->id();
-            $table->date('time');
             $table->integer('price');
             $table->foreignId('product_id');
             $table->timestamps();

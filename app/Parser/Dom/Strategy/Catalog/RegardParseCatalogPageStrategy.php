@@ -18,7 +18,7 @@ class RegardParseCatalogPageStrategy extends ParseCatalogPageStrategy
 
     public function getHost()
     {
-        return 'https://www.regard.ru';
+        return config('constants.host.regard');
     }
 
     static function apply($url)
