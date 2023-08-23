@@ -11,10 +11,6 @@ class ParseProductsCommand extends Command
     protected $description = 'Parse products data';
     public function handle()
     {
-        if($this->argument('shop')) {
-            dispatch(new ParseProductsJob($this->argument('shop')));
-        } else {
-            dispatch(new ParseProductsJob());
-        }
+        dispatch(new ParseProductsJob($this->argument('shop')));
     }
 }

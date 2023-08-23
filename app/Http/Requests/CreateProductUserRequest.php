@@ -4,7 +4,9 @@ namespace App\Http\Requests;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Rules\ProductUserConflictRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class CreateProductUserRequest extends FormRequest
@@ -17,6 +19,14 @@ class CreateProductUserRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'user_id' => $this->route('userId'),
+            'product_id' => $this->route('productId')
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,16 +34,10 @@ class CreateProductUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
-    }
-
-    public function all($keys = null)
-    {
-        $user = User::find($this->route('userId'));
-        $productId = $this->route('productId');
-        if ($user->products()->find($productId) !== null) {
-            throw new ConflictHttpException();
-        }
-        return parent::all();
+        return [
+            'user_id' => 'required',
+            'product_id' => ['required', new ProductUserConflictRule($this->route('userId'), $this->route('productId'), 'save')],
+            'notification_price' => 'numeric|min:1'
+        ];
     }
 }

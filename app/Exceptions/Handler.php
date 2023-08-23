@@ -32,9 +32,15 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e)
     {
         if ($e instanceof ModelNotFoundException) {
+            if($request->wantsJson()) {
+                return response()->json(['message' => 'object not found'], 404);
+            }
             return response("object not found", 404);
         }
         if ($e instanceof ConflictHttpException) {
+            if($request->wantsJson()) {
+                return response()->json(['message' => 'conflict'], 409);
+            }
             return response("conflict", 409);
         }
         return parent::render($request, $e);

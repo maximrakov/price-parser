@@ -36,7 +36,6 @@ abstract class ParseProductStrategy
 
     public function parse($link): void
     {
-        $link = $this->getHost() . $link;
         $dom = $this->getPageDOM($link);
         $price = $this->getPrice($dom);
         $name = $this->getName($dom);

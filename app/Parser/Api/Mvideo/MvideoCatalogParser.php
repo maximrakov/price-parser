@@ -42,9 +42,10 @@ class MvideoCatalogParser implements CatalogParser
             $productIdList = $this->getIdLists($offset, $limit);
             $productsInfo = $this->getInfo($productIdList); // получаем название картинку ссылку на товары
             $prices = $this->getPrices($productIdList); // получаем цену товаров
+            $shopId = Shop::where('name', 'mvideo')->value('id');
             foreach ($productsInfo as $id => $info) {
                 $shop = Shop::where('name', 'mvideo')->first();
-                $this->productService->save(new ProductDTO($info['link'], $info['name'], $prices[$id], $info['image'], 'api', $shop->id));
+                $this->productService->save(new ProductDTO($info['link'], $info['name'], $prices[$id], $info['image'], 'api', $shopId));
             }
             $offset += $limit;
         }

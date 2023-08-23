@@ -21,11 +21,7 @@ class ParseProductsJob implements ShouldQueue
     private ?Shop $shop;
     public function __construct(string $shop=null)
     {
-        if ($shop) {
-            $this->shop = Shop::where('name', $shop)->first();
-        } else {
-            $this->shop = null;
-        }
+        $this->shop = $shop ? Shop::where('name', $shop)->first() : null;
     }
 
     /**
@@ -36,7 +32,7 @@ class ParseProductsJob implements ShouldQueue
         if ($this->shop) {
             dispatch(new ExecuteParsingJob(new $this->shop->parser()));
         } else {
-            Shop::cursor()->each(function (Shop $shop) {
+            Shop::all()->each(function (Shop $shop) {
                 dispatch(new ExecuteParsingJob(new $shop->parser()))->onQueue('parsingQueue');
             });
         }
