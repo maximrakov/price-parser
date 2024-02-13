@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Product;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -14,25 +15,12 @@ class PriceUpdated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $product;
+
 
     /**
      * Create a new event instance.
      */
-    public function __construct($product)
+    public function __construct(public Product $product)
     {
-        $this->product = $product;
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
     }
 }

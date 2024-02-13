@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Product extends Model
+class Product extends Model implements CrawledProduct
 {
     use HasFactory;
 
@@ -15,7 +15,9 @@ class Product extends Model
         'link',
         'name',
         'price',
-        'image'
+        'image',
+        'parsing_way',
+        'shop'
     ];
 
     public function priceEntry(): HasMany

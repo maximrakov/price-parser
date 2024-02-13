@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Bot\TelegramBot;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use Telegram\Bot\Api;
 
 class TelegramBotServiceProvider extends ServiceProvider
 {
@@ -13,8 +13,8 @@ class TelegramBotServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(TelegramBot::class, function (Application $app) {
-            return new TelegramBot();
+        $this->app->singleton(Api::class, function (Application $app) {
+            return new Api(env('TELEGRAM_BOT_TOKEN'));
         });
     }
 

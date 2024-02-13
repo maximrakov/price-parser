@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -27,8 +28,9 @@ class AuthController extends Controller
         return $user;
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
+        $request->validated();
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response([
                 'message' => 'Invalid credentials!'
@@ -47,7 +49,7 @@ class AuthController extends Controller
         return Auth::user();
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         $cookie = Cookie::forget('jwt');
         return \response('Success')
@@ -56,9 +58,9 @@ class AuthController extends Controller
 
     private function generateCode()
     {
-        $code = rand(1, 1000000000);
+        $code = rand(100000000, 999999999);
         while (User::where('code', $code)->first() != null) {
-            $code = rand(1, 1000000000);
+            $code = rand(100000000, 999999999);
         }
         return $code;
     }

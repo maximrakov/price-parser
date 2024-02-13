@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Bot\TelegramBot;
+use App\Http\Requests\RedirectRequest;
+use App\Http\Requests\ShowProductRequest;
+use App\Http\Requests\ShowSubscriptionsRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +23,13 @@ class IndexController extends Controller
         return Inertia::render('Register');
     }
 
-    public function login()
+    public function login(RedirectRequest $request)
     {
-        return Inertia::render('Login');
+        $redirect = $request['redirectTo'] ? $request['redirectTo'] : '/';
+        return Inertia::render('Login', ['redirectTo' => $redirect]);
     }
 
-    public function product(Request $request)
+    public function product(ShowProductRequest $request)
     {
         $product = null;
         if ($request['link']) {
@@ -37,19 +41,36 @@ class IndexController extends Controller
             return Inertia::render('Home', ['error' => 'Incorrect link']);
         }
         return Inertia::render('Product',
-            ['product' => $product, 'priceHistory' => $product->priceEntry()->get()]);
+            ['product' => $product,
+                'priceHistory' => $product->priceEntry()
+                    ->paginate(config('constants.products.elements_on_page'))
+                    ->items()]);
     }
 
-    public function subscriptions()
+    public function subscriptions(ShowSubscriptionsRequest $request)
     {
+        $productsAmount = Auth::user()->products()->count('link');
         $products = Auth::user()
             ->products()
-            ->get();
-        return Inertia::render('Subscriptions', ['products' => $products]);
+            ->paginate(config('constants.products.elements_on_page'))
+            ->items();
+        return Inertia::render('Subscriptions', ['products' => $products,
+            'pageAmount' => $this->calcPageAmount($productsAmount, config('constants.products.elements_on_page')),
+            'elementsOnPage' => config('constants.products.elements_on_page'),
+            'currentPage' => $request['page']]);
     }
 
     public function notifications()
     {
         return Inertia::render('Notifications');
+    }
+
+    private function calcPageAmount($productsAmount, $elementsOnPage)
+    {
+        if ($productsAmount % $elementsOnPage === 0) {
+            return intval($productsAmount / $elementsOnPage);
+        } else {
+            return intval($productsAmount / $elementsOnPage) + 1;
+        }
     }
 }
